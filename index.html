@@ -29,7 +29,7 @@
           <a href="#features">Features</a>
           <a href="#how-it-works">How it works</a>
           <a href="#download">Download</a>
-          <a href="assets/LahuzGo-Rider.apk" download="LahuzGo-Rider.apk">Rider app</a>
+          <a href="#rider" data-rider-open>Rider app</a>
           <a class="nav-cta" href="#download">Get the app <span aria-hidden="true">↗</span></a>
         </nav>
       </header>
@@ -43,7 +43,7 @@
               LahuzGo puts your padala and pabili requests in one clear place—from the first detail to the final delivery.
             </p>
             <div class="hero-actions" id="download">
-              <a class="button button-primary" href="assets/LahuzGo.apk" download="LahuzGo.apk">
+              <a class="button button-primary" href="assets/LahuzGo.apk" download="LahuzGo.apk" data-download-label="LahuzGo">
                 <span class="button-icon" aria-hidden="true">↓</span>
                 Download LahuzGo
               </a>
@@ -175,10 +175,38 @@
               <h2>Make your next delivery easier.</h2>
               <p>Download LahuzGo Customer and keep your requests, updates, and rider connection in one place.</p>
             </div>
-            <a class="button button-light" href="assets/LahuzGo.apk" download="LahuzGo.apk">Download LahuzGo <span aria-hidden="true">↗</span></a>
+            <a class="button button-light" href="assets/LahuzGo.apk" download="LahuzGo.apk" data-download-label="LahuzGo">Download LahuzGo <span aria-hidden="true">↗</span></a>
           </div>
         </section>
       </main>
+
+      <div class="rider-modal" id="rider-modal" hidden>
+        <button class="rider-modal-backdrop" type="button" data-rider-close aria-label="Close rider invitation"></button>
+        <section class="rider-dialog" role="dialog" aria-modal="true" aria-labelledby="rider-dialog-title" aria-describedby="rider-dialog-copy">
+          <button class="rider-modal-close" type="button" data-rider-close aria-label="Close rider invitation">×</button>
+          <div class="rider-dialog-topline">
+            <span class="rider-dialog-icon"><img src="assets/lahuzgo-logo.png" alt="" /></span>
+            <span class="eyebrow"><span class="eyebrow-dot"></span> For riders</span>
+          </div>
+          <h2 id="rider-dialog-title">Turn your time into extra opportunity.</h2>
+          <p id="rider-dialog-copy">Ride with LahuzGo and help make everyday deliveries easier. Choose when you are available, accept requests that fit you, and keep every delivery moving with a clear rider experience.</p>
+          <div class="rider-benefits" aria-label="Rider app benefits">
+            <div><span>01</span><p>See available delivery requests</p></div>
+            <div><span>02</span><p>Stay in control of your schedule</p></div>
+            <div><span>03</span><p>Track your deliveries and earnings</p></div>
+          </div>
+          <a class="button button-primary rider-download" href="assets/LahuzGo-Rider.apk" download="LahuzGo-Rider.apk" data-download-label="LahuzGo Rider">
+            <span class="button-icon" aria-hidden="true">↓</span>
+            Download LahuzGo Rider
+          </a>
+          <p class="rider-dialog-note">Ready to move with LahuzGo? Download the rider app and get started.</p>
+        </section>
+      </div>
+
+      <div class="download-toast" id="download-toast" role="status" aria-live="polite" hidden>
+        <span class="download-toast-icon" aria-hidden="true">↓</span>
+        <span><strong>Download starting</strong><small id="download-toast-copy">Your APK download is being prepared.</small></span>
+      </div>
 
       <footer class="site-footer">
         <div class="section-wrap footer-inner">
