@@ -62,8 +62,9 @@ h1 span { color: var(--yellow); }
 .ios-coming-button { min-width: 205px; border: 0; box-shadow: 0 13px 25px rgba(255,208,92,.18); }
 .ios-coming-button:hover { background: #ffda73; box-shadow: 0 17px 34px rgba(255,208,92,.28); }
 .ios-coming-button .button-copy strong { color: var(--navy-950); }
-.ios-coming-button .button-copy small { color: rgba(9, 33, 83, .7); opacity: 1; }
+.ios-coming-button .button-copy small { display: none; }
 .ios-button-icon { font-size: 14px; }
+.hero-actions .button-primary { min-width: 205px; }
 .button-icon { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; color: var(--yellow); background: var(--navy-950); font-size: 19px; line-height: 1; }
 .button-icon svg { display: block; }
 .text-link { color: #dce8ff; font-size: 14px; font-weight: 750; }
