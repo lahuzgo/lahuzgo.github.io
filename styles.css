@@ -65,6 +65,7 @@ h1 span { color: var(--yellow); }
 .ios-coming-button .button-copy small { color: rgba(9, 33, 83, .7); opacity: 1; }
 .ios-button-icon { font-size: 14px; }
 .button-icon { display: grid; place-items: center; width: 25px; height: 25px; border-radius: 50%; color: var(--yellow); background: var(--navy-950); font-size: 19px; line-height: 1; }
+.button-icon svg { display: block; }
 .text-link { color: #dce8ff; font-size: 14px; font-weight: 750; }
 .text-link span { color: var(--yellow); padding-left: 4px; }
 .hero-proof { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 48px; color: #8094bb; font-size: 12px; }
