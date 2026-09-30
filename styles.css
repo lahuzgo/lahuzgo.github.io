@@ -51,9 +51,11 @@ h1 span { color: var(--yellow); }
 .button { min-height: 52px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 0 19px; border-radius: 13px; font-size: 14px; font-weight: 800; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
 .button-copy { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px; line-height: 1.05; }
 .button-copy small { font-size: 9px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; opacity: .72; }
-.platform-coming { min-height: 52px; display: inline-flex; align-items: center; gap: 9px; padding: 0 16px; border: 1px solid rgba(177, 204, 244, .28); border-radius: 13px; color: #d1def3; background: rgba(255,255,255,.07); font-size: 12px; white-space: nowrap; }
+.platform-coming { min-height: 52px; display: inline-flex; align-items: center; gap: 9px; padding: 0 16px; border: 1px solid rgba(177, 204, 244, .28); border-radius: 13px; color: #d1def3; background: rgba(255,255,255,.07); font-family: inherit; font-size: 12px; font-weight: 750; white-space: nowrap; cursor: pointer; appearance: none; transition: transform .2s ease, border-color .2s ease, background .2s ease; }
 .platform-coming strong { color: #f4f8ff; font-size: 13px; }
 .platform-coming span { color: #9eb4d7; }
+.platform-coming:hover { transform: translateY(-2px); border-color: rgba(177, 204, 244, .52); background: rgba(255,255,255,.12); }
+.platform-coming:focus-visible { outline: 3px solid rgba(255, 208, 92, .75); outline-offset: 3px; }
 .button:hover { transform: translateY(-2px); }
 .button-primary { color: var(--navy-950); background: var(--yellow); box-shadow: 0 13px 25px rgba(255,208,92,.18); }
 .button-primary:hover { box-shadow: 0 17px 34px rgba(255,208,92,.28); }
@@ -246,6 +248,7 @@ body.rider-modal-open { overflow: hidden; }
 .download-toast small { display: block; }
 .download-toast strong { font-size: 14px; }
 .download-toast small { margin-top: 3px; color: #b9cbea; font-size: 12px; line-height: 1.35; }
+.ios-toast-icon { color: #2458bc; background: #dce8ff; font-size: 10px; letter-spacing: .04em; }
 @keyframes download-toast-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }

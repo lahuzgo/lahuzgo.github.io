@@ -4,7 +4,9 @@ const riderModal = document.querySelector('#rider-modal');
 const riderModalCloseButton = riderModal?.querySelector('.rider-modal-close');
 const downloadToast = document.querySelector('#download-toast');
 const downloadToastCopy = document.querySelector('#download-toast-copy');
+const iosToast = document.querySelector('#ios-toast');
 let downloadToastTimer;
+let iosToastTimer;
 
 const closeRiderModal = () => {
   if (!riderModal) return;
@@ -68,6 +70,20 @@ const showDownloadToast = (event) => {
 
 document.querySelectorAll('a[download]').forEach((link) => {
   link.addEventListener('click', showDownloadToast);
+});
+
+const showIosToast = (event) => {
+  event.preventDefault();
+  if (!iosToast) return;
+  iosToast.hidden = false;
+  window.clearTimeout(iosToastTimer);
+  iosToastTimer = window.setTimeout(() => {
+    iosToast.hidden = true;
+  }, 4200);
+};
+
+document.querySelectorAll('[data-ios-coming]').forEach((button) => {
+  button.addEventListener('click', showIosToast);
 });
 
 const year = document.querySelector('#year');
