@@ -29,7 +29,7 @@
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && menuButton?.getAttribute('aria-expanded') === 'true') closeMenu({returnFocus:true});
   });
-  window.matchMedia('(min-width: 721px)').addEventListener('change', event => {
+  window.matchMedia('(min-width: 861px)').addEventListener('change', event => {
     if (event.matches) closeMenu();
   });
   const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 12);
@@ -71,8 +71,9 @@
   }
 
   document.querySelectorAll('[data-rider-open]').forEach(trigger => {
-    trigger.addEventListener('click', () => {
+    trigger.addEventListener('click', event => {
       if (!dialog) return;
+      event.preventDefault();
       dialogTrigger = trigger;
       closeMenu();
       if (!dialog.open) dialog.showModal();
@@ -100,9 +101,15 @@
     if (event.clientX < bounds.left || event.clientX > bounds.right ||
         event.clientY < bounds.top || event.clientY > bounds.bottom) closeDialog();
   });
-  dialog?.addEventListener('close', () => dialogTrigger?.focus());
-  // Keep old shared rider links working without hijacking the new rider section.
-  if (window.location.hash === '#rider' && dialog) dialog.showModal();
+  dialog?.addEventListener('close', () => {
+    const target = dialogTrigger?.getClientRects().length ? dialogTrigger : menuButton;
+    target?.focus({preventScroll:true});
+  });
+  // Previous shared rider URLs now open the navigation-only rider panel.
+  if (['#rider', '#riders'].includes(window.location.hash) && dialog) {
+    dialogTrigger = navigation?.querySelector('[data-rider-open]');
+    dialog.showModal();
+  }
 
   const showToast = (title, message) => {
     if (!toast) return;
