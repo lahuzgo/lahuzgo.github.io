@@ -16,6 +16,11 @@
 .signup-error { margin:0 0 16px; padding:12px 14px; color:#8d2232; background:#fff0f2; border:1px solid #edbac3; border-radius:9px; font-size:12px; line-height:1.6; }
 .signup-success { outline:none; padding:20px; border:1px solid #a8d5c5; background:#f1faf6; border-radius:12px; color:#174d3e; }
 .signup-success h3 { color:#174d3e; font-size:22px; }.signup-success p,.signup-success li { font-size:13px; line-height:1.75; }.signup-success ol { padding-left:20px; margin:16px 0 0; }
+.signup-success[data-state=pending],.signup-success[data-state=already_pending] { border-color:#e5c991; background:#fff9ec; color:#694b16; }
+.signup-success[data-state=pending] h3,.signup-success[data-state=already_pending] h3 { color:#694b16; }
+.signup-status-label { display:inline-block; margin:0 0 13px; padding:5px 9px; border:1px solid currentColor; border-radius:6px; font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
+.signup-change-email { appearance:none; display:inline-flex; margin:4px 0 0; padding:10px 0; min-height:44px; border:0; background:transparent; color:inherit; font:inherit; font-size:12px; font-weight:700; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
+.signup-change-email:focus-visible { outline:2px solid #1454ee; outline-offset:3px; border-radius:3px; }
 .rider-test-return { margin:22px 0 0; padding-top:20px; border-top:1px solid #d6e1f1; font-size:12px; color:#536987; line-height:1.7; }
 .rider-test-return a { color:#1454ee; text-underline-offset:3px; font-weight:700; }
 .rider-dialog.is-signing-up .rider-perks,.rider-dialog.is-signing-up .rider-dialog-label,.rider-dialog.is-signing-up .rider-onboarding-note { display:none; }
