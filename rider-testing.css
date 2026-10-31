@@ -1,0 +1,33 @@
+/* Closed-testing signup stays within the existing rider dialog. */
+#rider-modal [hidden] { display:none !important; }
+.rider-dialog .rider-signup { text-align:left; }
+.rider-signup h3 { margin:0 0 10px; font-size:25px; letter-spacing:-.04em; color:#102754; line-height:1.2; }
+.rider-signup .signup-copy { margin:0 0 22px; color:#536987; font-size:13px; line-height:1.7; }
+.rider-signup label[for="tester-email"] { display:block; margin-bottom:9px; font-size:13px; font-weight:800; color:#102754; }
+.rider-signup input[type=email] { box-sizing:border-box; width:100%; min-width:0; padding:15px 16px; border:1px solid #bccde5; border-radius:10px; background:white; color:#102754; font:inherit; font-size:16px; outline:none; }
+.rider-signup input[type=email]:focus { border-color:#1454ee; box-shadow:0 0 0 3px #1454ee1c; }
+.rider-signup .signup-hint { color:#536987; font-size:11px; line-height:1.6; margin:9px 0 19px; }
+.rider-signup .signup-consent { display:flex; align-items:flex-start; gap:10px; color:#344c6d; font-size:12px; line-height:1.7; margin-bottom:20px; }
+.rider-signup .signup-consent input { width:18px; height:18px; flex:0 0 18px; margin:2px 0 0; accent-color:#1454ee; }
+.rider-signup a { color:#1454ee; text-decoration:underline; text-underline-offset:3px; }
+.rider-signup .button { width:100%; justify-content:center; min-height:54px; border:0; cursor:pointer; font:inherit; font-size:14px; font-weight:800; }
+.rider-signup .button:disabled { opacity:.65; cursor:wait; }
+.signup-honeypot { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.signup-error { margin:0 0 16px; padding:12px 14px; color:#8d2232; background:#fff0f2; border:1px solid #edbac3; border-radius:9px; font-size:12px; line-height:1.6; }
+.signup-success { outline:none; padding:20px; border:1px solid #a8d5c5; background:#f1faf6; border-radius:12px; color:#174d3e; }
+.signup-success h3 { color:#174d3e; font-size:22px; }.signup-success p,.signup-success li { font-size:13px; line-height:1.75; }.signup-success ol { padding-left:20px; margin:16px 0 0; }
+.rider-test-return { margin:22px 0 0; padding-top:20px; border-top:1px solid #d6e1f1; font-size:12px; color:#536987; line-height:1.7; }
+.rider-test-return a { color:#1454ee; text-underline-offset:3px; font-weight:700; }
+.rider-dialog.is-signing-up .rider-perks,.rider-dialog.is-signing-up .rider-dialog-label,.rider-dialog.is-signing-up .rider-onboarding-note { display:none; }
+.rider-dialog.is-signing-up .rider-dialog-header { padding-top:28px; padding-bottom:24px; }
+.rider-dialog.is-signing-up .rider-dialog-header h2 { font-size:36px; }
+.rider-dialog.is-signing-up .rider-dialog-header .eyebrow { display:none; }
+.rider-dialog.is-signing-up .rider-dialog-brand { margin-bottom:20px; }
+.rider-dialog { max-height:calc(100dvh - 24px); overscroll-behavior:contain; scroll-padding:20px; }
+@media(max-width:600px) {
+ .rider-dialog.is-signing-up .rider-dialog-header h2 { font-size:30px; }
+ .rider-dialog.is-signing-up .rider-dialog-header { padding:26px 24px 22px; }
+ .rider-dialog.is-signing-up .rider-dialog-content { padding:25px 24px; }
+ .rider-signup h3 { font-size:23px; }
+ .signup-success { padding:17px; }
+}

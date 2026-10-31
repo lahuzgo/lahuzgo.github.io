@@ -19,7 +19,9 @@
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles.css?v=services-20261031" />
   <link rel="stylesheet" href="services.css?v=services-20261031" />
-  <script src="script.js?v=services-20261031" defer></script>
+  <link rel="stylesheet" href="rider-testing.css?v=testing-20261031" />
+  <script src="script.js?v=testing-20261031" defer></script>
+  <script src="rider-testing.js?v=testing-20261031" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -46,7 +48,7 @@
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation"><span></span><span></span></button>
       <nav class="site-nav" id="site-nav" aria-label="Main navigation">
         <a href="#services">Our services</a><a href="#how-it-works">How it works</a><a href="#questions">Good to know</a>
-        <a class="nav-rider" href="assets/LahuzGo-Rider.apk" data-rider-open aria-haspopup="dialog" aria-controls="rider-modal"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg>For riders<svg class="icon nav-rider-arrow" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+        <a class="nav-rider" href="#rider-modal" data-rider-open aria-haspopup="dialog" aria-controls="rider-modal"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg>For riders<svg class="icon nav-rider-arrow" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
         <a class="button button-small" href="#download">Get the app <svg class="icon"><use href="#i-arrow-up"/></svg></a>
       </nav>
     </div>
@@ -157,8 +159,29 @@
     <div class="rider-dialog-content">
       <p class="rider-dialog-label">A LITTLE MORE CONTROL OVER YOUR DAY.</p>
       <ul class="rider-perks"><li><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg><span>Your availability<small>Manage when you’re online.</small></span></li><li><svg class="icon" aria-hidden="true"><use href="#i-box"/></svg><span>Your deliveries<small>Follow assigned requests.</small></span></li><li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Your earnings<small>Track earnings and remittances.</small></span></li></ul>
-      <div class="rider-onboarding-note"><span>01 / GET STARTED</span><p>Install the rider app, create your account and submit the required documents. Complete the rider review before receiving deliveries.</p></div>
-      <a class="button" href="assets/LahuzGo-Rider.apk" download="LahuzGo-Rider.apk" data-download-label="LahuzGo Rider"><span>Get the rider app<small>Android download</small></span><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></a>
+      <div class="rider-onboarding-note"><span>01 / EARLY ACCESS</span><p>The rider app is in closed testing. Request access with your Google Play email, then install from Google Play once our team adds you.</p></div>
+      <button class="button" type="button" data-rider-signup-open><span>Get the rider app<small>Join closed testing on Google Play</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <section class="rider-signup" id="rider-signup" aria-label="Request rider test access" hidden>
+        <form id="rider-signup-form">
+          <h3>Join the rider test.</h3>
+          <p class="signup-copy">Leave the email you use in Google Play. Our team will add it to the SabayGo Rider tester list.</p>
+          <label for="tester-email">Gmail / Google Play email</label>
+          <input id="tester-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" maxlength="254" placeholder="you@gmail.com" aria-describedby="tester-email-hint" required />
+          <p class="signup-hint" id="tester-email-hint">Use the same Google account that is signed in to the Play Store on your phone.</p>
+          <div class="signup-honeypot" aria-hidden="true"><label for="tester-website">Leave this field empty</label><input id="tester-website" name="website" type="text" tabindex="-1" autocomplete="off" /></div>
+          <label class="signup-consent"><input id="tester-consent" type="checkbox" required /><span>I agree to share this email with LahuzGo and Google Play to manage my closed-testing access. <a href="rider-privacy-policy.html#closed-testing" target="_blank" rel="noopener">Privacy notice</a></span></label>
+          <p class="signup-error" id="tester-error" role="alert" hidden></p>
+          <button class="button" type="submit">Request test access</button>
+          <p class="signup-hint">Access is added manually. Submitting this form does not enroll you or send an email automatically.</p>
+        </form>
+        <div class="signup-success" id="tester-success" role="status" tabindex="-1" hidden>
+          <h3>Request received.</h3><p>Your email is on our request list. Our team still needs to add you in Google Play Console.</p>
+          <ol><li>Allow time for the team to add your account.</li><li>Open the test link below with the same Google account, then choose <strong>Become a tester</strong>.</li><li>Follow the Google Play link to install <strong>SabayGo Rider</strong>.</li></ol>
+          <p>If Google says the test is unavailable, your access may still be pending. Try again after the team adds you.</p>
+        </div>
+      </section>
+      <p class="rider-test-return">Already added to the tester list? <a href="https://play.google.com/apps/testing/com.sabaygo.sabaygo_rider" target="_blank" rel="noopener noreferrer">Open Google Play test ↗</a></p>
+      <noscript><p>Enable JavaScript to request test access, or contact <a href="mailto:atonlopez55@gmail.com">atonlopez55@gmail.com</a>.</p></noscript>
       <a class="dialog-policy" href="rider-terms-and-conditions.html">Read the rider terms &amp; conditions <span aria-hidden="true">↗</span></a>
     </div>
   </dialog>

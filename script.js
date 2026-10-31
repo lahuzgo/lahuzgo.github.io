@@ -89,7 +89,7 @@
   const closeDialog = () => { if (dialog?.open) dialog.close(); };
   dialog?.addEventListener('keydown', event => {
     if (event.key !== 'Tab') return;
-    const controls = [...dialog.querySelectorAll('button:not([disabled]), a[href], [tabindex="0"]')]
+    const controls = [...dialog.querySelectorAll('button:not([disabled]), a[href], input:not([disabled]):not([tabindex="-1"]), textarea:not([disabled]), select:not([disabled]), [tabindex="0"]')]
       .filter(element => element.getClientRects().length > 0);
     const first = controls[0];
     const last = controls[controls.length - 1];
