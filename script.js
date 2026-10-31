@@ -37,9 +37,14 @@
   updateHeader();
 
   // Both descriptions remain readable without JS. Enhance into tabs only when ready.
-  const tabs = [...document.querySelectorAll('.service-tab')];
+  const tabs = [...document.querySelectorAll('[data-service-tab]')];
   const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
+  const prepareServiceImage = index => {
+    const image = panels[index]?.querySelector('.service-photo img');
+    if (image) image.loading = 'eager';
+  };
   const activateService = (index, {focus = false} = {}) => {
+    prepareServiceImage(index);
     tabs.forEach((tab, current) => {
       const active = current === index;
       tab.setAttribute('aria-selected', String(active));
@@ -49,7 +54,7 @@
     if (focus) tabs[index].focus();
   };
   if (tabs.length === 2 && panels.every(Boolean)) {
-    document.querySelector('.service-tabs').hidden = false;
+    document.querySelector('.service-switcher').hidden = false;
     panels.forEach((panel, index) => {
       panel.setAttribute('role', 'tabpanel');
       panel.setAttribute('aria-labelledby', tabs[index].id);
@@ -57,6 +62,8 @@
     });
     activateService(0);
     tabs.forEach((tab, index) => {
+      tab.addEventListener('pointerenter', () => prepareServiceImage(index), {once:true});
+      tab.addEventListener('focus', () => prepareServiceImage(index), {once:true});
       tab.addEventListener('click', () => activateService(index));
       tab.addEventListener('keydown', event => {
         const next = event.key === 'ArrowRight' ? (index + 1) % tabs.length

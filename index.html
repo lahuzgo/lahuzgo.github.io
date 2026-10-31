@@ -17,8 +17,9 @@
   <link rel="apple-touch-icon" href="assets/lahuzgo-launcher-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="styles.css?v=customer-first-2" />
-  <script src="script.js?v=customer-first-2" defer></script>
+  <link rel="stylesheet" href="styles.css?v=services-20261031" />
+  <link rel="stylesheet" href="services.css?v=services-20261031" />
+  <script src="script.js?v=services-20261031" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -69,19 +70,60 @@
       </div>
     </section>
     <div class="ticker" aria-label="Send a little. Shop a little. Live a little."><div class="ticker-track" aria-hidden="true"><span>SEND A LITTLE.</span><i>↗</i><span>SHOP A LITTLE.</span><i>↗</i><span>LIVE A LITTLE.</span><i>↗</i><span>SEND A LITTLE.</span><i>↗</i><span>SHOP A LITTLE.</span><i>↗</i><span>LIVE A LITTLE.</span><i>↗</i></div></div>
-    <section class="services section-space wrap" id="services" aria-labelledby="services-title">
-      <div class="section-heading reveal"><div><p class="eyebrow">01 / A LITTLE HELP GOES A LONG WAY</p><h2 id="services-title">Two ways to take<br />a load <em>off.</em></h2></div><p>Some days, you need to send something.<br />Other days, you need someone to get it.<br />Either way, we’re on it.</p></div>
-      <div class="service-tabs reveal" role="tablist" aria-label="Explore delivery services" hidden><button id="tab-padala" class="service-tab" role="tab" type="button" aria-controls="panel-padala" aria-selected="true"><svg class="icon"><use href="#i-box"/></svg><span>Padala <small>Send something</small></span><svg class="icon tab-arrow"><use href="#i-arrow"/></svg></button><button id="tab-pabili" class="service-tab" role="tab" type="button" aria-controls="panel-pabili" aria-selected="false" tabindex="-1"><svg class="icon"><use href="#i-bag"/></svg><span>Pabili <small>Get something</small></span><svg class="icon tab-arrow"><use href="#i-arrow"/></svg></button></div>
-      <div class="service-panels reveal">
-        <article class="service-panel" id="panel-padala" aria-labelledby="padala-title">
-          <div class="service-copy"><span class="service-kicker">FOR THE THINGS GOING PLACES</span><h3 id="padala-title">From your hands.<br />To <em>theirs.</em></h3><p>A parcel for a friend. Documents for work. Something important that just can’t wait. Add the pickup, drop-off and details—we’ll help with the trip.</p><ul class="simple-list"><li><svg class="icon"><use href="#i-check"/></svg> Pickup and destination in one request</li><li><svg class="icon"><use href="#i-check"/></svg> Delivery notes that reach your rider</li><li><svg class="icon"><use href="#i-check"/></svg> Follow the journey in the app</li></ul><a class="text-link" href="#download">Send with Padala <svg class="icon"><use href="#i-arrow-up"/></svg></a></div>
-          <div class="service-scene parcel-scene" aria-hidden="true"><div class="scene-grid"></div><div class="scene-orbit orbit-one"></div><div class="scene-orbit orbit-two"></div><div class="parcel"><div class="parcel-side"></div><div class="parcel-top"></div><div class="parcel-face"><span class="parcel-tape"></span><span class="parcel-logo">LahuzGo <span>↗</span></span><span class="parcel-lines">HANDLE WITH<br />A LITTLE CARE.</span></div></div><div class="scene-point point-start"><i></i><span>Your pickup</span></div><div class="scene-point point-end"><svg class="icon"><use href="#i-pin"/></svg><span>Their doorstep</span></div><div class="scene-note"><svg class="icon"><use href="#i-box"/></svg> A little parcel. A big difference.</div></div>
+    <section class="services-v2 wrap" id="services" aria-labelledby="services-title">
+      <div class="services-heading reveal">
+        <div><p class="eyebrow"><span class="blue-dash" aria-hidden="true"></span> A LITTLE HELP, EVERY DAY</p><h2 id="services-title">Your errands.<br /><em>Consider them handled.</em></h2></div>
+        <p>Something to send. Something to buy.<br />Two simple ways to make room<br class="services-heading-break" /> for the rest of your day.</p>
+      </div>
+      <div class="service-switcher reveal" role="tablist" aria-label="Explore delivery services" hidden>
+        <button id="tab-padala" class="service-choice" data-service-tab role="tab" type="button" aria-controls="panel-padala" aria-selected="true"><span class="service-choice-index" aria-hidden="true">01</span><span class="service-choice-name">Padala<small>Send a parcel</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
+        <button id="tab-pabili" class="service-choice" data-service-tab role="tab" type="button" aria-controls="panel-pabili" aria-selected="false" tabindex="-1"><span class="service-choice-index" aria-hidden="true">02</span><span class="service-choice-name">Pabili<small>Get the essentials</small></span><svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></button>
+      </div>
+      <div class="service-stories reveal">
+        <article class="service-story" id="panel-padala" aria-labelledby="padala-title">
+          <figure class="service-visual">
+            <div class="service-photo">
+              <img src="assets/padala-handover-1280.webp" srcset="assets/padala-handover-640.webp 640w, assets/padala-handover-1280.webp 1280w" sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1100px) 50vw, 670px" width="1280" height="853" alt="Illustration of a parcel being handed over at a sunny blue doorway" loading="lazy" decoding="async" />
+              <span class="service-photo-label"><svg class="icon" aria-hidden="true"><use href="#i-box"/></svg>A thoughtful send.</span>
+            </div>
+            <figcaption class="service-route">
+              <span class="service-route-stop"><span class="route-dot" aria-hidden="true"></span><span><small>PICK UP</small><strong>Your location</strong></span></span>
+              <span class="service-route-line" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+              <span class="service-route-stop"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span><small>DELIVER</small><strong>Their doorstep</strong></span></span>
+            </figcaption>
+          </figure>
+          <div class="service-detail">
+            <p class="service-overline"><span>01</span> FOR THE THINGS GOING PLACES</p>
+            <h3 id="padala-title">From your doorstep.<br />To <em>theirs.</em></h3>
+            <p class="service-description">A parcel for a friend. Documents for work. Give us the pickup, destination and little details. Your rider takes it from there.</p>
+            <ul class="service-inclusions"><li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span>Your pickup. Their destination.</span></li><li><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span>Instructions shared with your rider.</span></li><li><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg><span>Delivery updates, all in the app.</span></li></ul>
+            <a class="service-action" href="#download">Send with Padala<svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+            <p class="service-app-note">Book in the LahuzGo customer app.</p>
+          </div>
         </article>
-        <article class="service-panel pabili-panel" id="panel-pabili" aria-labelledby="pabili-title">
-          <div class="service-copy"><span class="service-kicker">FOR THE THINGS ON YOUR LIST</span><h3 id="pabili-title">Your list.<br />Our <em>next stop.</em></h3><p>Groceries, everyday essentials, or that one thing you left off your list. Tell your rider what you need and where to get it, without putting your day on pause.</p><ul class="simple-list"><li><svg class="icon"><use href="#i-check"/></svg> Shopping details, all in one place</li><li><svg class="icon"><use href="#i-check"/></svg> Chat with your rider along the way</li><li><svg class="icon"><use href="#i-check"/></svg> From the store to your door</li></ul><a class="text-link" href="#download">Shop with Pabili <svg class="icon"><use href="#i-arrow-up"/></svg></a></div>
-          <div class="service-scene shopping-scene" aria-hidden="true"><div class="scene-grid"></div><div class="scene-orbit orbit-one"></div><div class="scene-orbit orbit-two"></div><div class="shopping-bag"><div class="bag-handle"></div><div class="bag-leaf leaf-one"></div><div class="bag-leaf leaf-two"></div><div class="bag-leaf leaf-three"></div><div class="bag-face"><span>LahuzGo ↗</span><small>A LITTLE LESS<br />ON YOUR TO-DO.</small></div></div><div class="scene-point point-start"><i></i><span>Your chosen store</span></div><div class="scene-point point-end"><svg class="icon"><use href="#i-pin"/></svg><span>Your doorstep</span></div><div class="scene-note"><svg class="icon"><use href="#i-bag"/></svg> Get the essentials. Keep your day.</div></div>
+        <article class="service-story" id="panel-pabili" aria-labelledby="pabili-title">
+          <figure class="service-visual">
+            <div class="service-photo">
+              <img src="assets/pabili-groceries-1280.webp" srcset="assets/pabili-groceries-640.webp 640w, assets/pabili-groceries-1280.webp 1280w" sizes="(max-width: 760px) calc(100vw - 40px), (max-width: 1100px) 50vw, 670px" width="1280" height="853" alt="Illustration of a grocery bag with fresh produce beside a blue tote" loading="lazy" decoding="async" />
+              <span class="service-photo-label"><svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>A little help with the list.</span>
+            </div>
+            <figcaption class="service-route">
+              <span class="service-route-stop"><span class="route-dot" aria-hidden="true"></span><span><small>SHOP</small><strong>Your chosen store</strong></span></span>
+              <span class="service-route-line" aria-hidden="true"><svg class="icon"><use href="#i-arrow"/></svg></span>
+              <span class="service-route-stop"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span><small>DELIVER</small><strong>Your doorstep</strong></span></span>
+            </figcaption>
+          </figure>
+          <div class="service-detail">
+            <p class="service-overline"><span>02</span> FOR THE THINGS ON YOUR LIST</p>
+            <h3 id="pabili-title">Your shopping list.<br />Our <em>next stop.</em></h3>
+            <p class="service-description">Groceries, daily essentials, or the one thing you forgot. Tell your rider what to get and where to buy it. Keep the rest of your day for you.</p>
+            <ul class="service-inclusions"><li><svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg><span>Your list and your chosen store.</span></li><li><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span>Chat about the little details.</span></li><li><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg><span>Follow your delivery in the app.</span></li></ul>
+            <a class="service-action" href="#download">Shop with Pabili<svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+            <p class="service-app-note">Book in the LahuzGo customer app.</p>
+          </div>
         </article>
       </div>
+      <div class="services-footnote"><span>LOCAL ERRANDS. A LIGHTER DAY.</span><a href="#how-it-works">New to LahuzGo? See how it works<svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a></div>
     </section>
     <section class="how-section section-space" id="how-it-works" aria-labelledby="how-title">
       <div class="wrap how-layout">
