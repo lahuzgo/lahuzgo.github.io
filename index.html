@@ -19,8 +19,10 @@
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="styles.css?v=services-20261031" />
   <link rel="stylesheet" href="services.css?v=services-20261031" />
+  <link rel="stylesheet" href="tracking.css?v=20261101" />
   <link rel="stylesheet" href="rider-testing.css?v=status-20261031" />
   <script src="script.js?v=testing-20261031" defer></script>
+  <script src="tracking.js?v=20261101" defer></script>
   <script src="rider-testing.js?v=status-20261031" defer></script>
 </head>
 <body id="top">
@@ -133,10 +135,117 @@
         <ol class="how-steps"><li class="reveal"><span class="step-number">01</span><div><h3>Pick your kind of help.</h3><p>Open the app and choose Padala to send an item, or Pabili to have something bought for you.</p></div><svg class="icon"><use href="#i-box"/></svg></li><li class="reveal"><span class="step-number">02</span><div><h3>Tell us the little details.</h3><p>Add your locations, contact details and instructions. Review your request before sending it.</p></div><svg class="icon"><use href="#i-pin"/></svg></li><li class="reveal"><span class="step-number">03</span><div><h3>Get on with your day.</h3><p>Once a rider is assigned, follow delivery updates and use in-app chat when you need to connect.</p></div><svg class="icon"><use href="#i-route"/></svg></li></ol>
       </div>
     </section>
-    <section class="connected-section" id="features" aria-labelledby="connected-title">
-      <div class="wrap connected-layout">
-        <div class="connected-copy reveal"><p class="eyebrow">03 / YOU’RE NEVER OUT OF THE LOOP</p><h2 id="connected-title">Out of your hands.<br />Not out of <em>touch.</em></h2><p>Know what’s happening without chasing updates. Your request, your rider and the important details stay connected.</p><div class="connected-features"><div><svg class="icon"><use href="#i-route"/></svg><span><strong>Follow the journey</strong><small>Delivery status and rider-location updates.</small></span></div><div><svg class="icon"><use href="#i-chat"/></svg><span><strong>A conversation away</strong><small>Keep instructions clear with in-app chat.</small></span></div><div><svg class="icon"><use href="#i-box"/></svg><span><strong>Every detail, together</strong><small>Locations, notes and recipient information.</small></span></div></div></div>
-        <div class="journey-preview reveal"><div class="journey-top"><span class="preview-monogram">L<span>↗</span></span><span>Your delivery journey<small>Everything, a little clearer.</small></span><svg class="icon"><use href="#i-route"/></svg></div><div class="map-preview" aria-hidden="true"><svg class="map-art" viewBox="0 0 520 350" preserveAspectRatio="xMidYMid slice"><rect width="520" height="350" fill="#e6edf6"/><path d="M450-20c-80 70 25 85-45 155s-35 130-90 235" stroke="#bcd8ee" stroke-width="64" fill="none"/><g stroke="#fff" stroke-width="11" fill="none"><path d="m-30 280 420-160 160 50M40-20l110 140 130 260M-20 55l190 22 120 110 240 25M120 360l-3-185L245-20M-20 175l140-2L390-30M300 0l-20 185 260 120"/></g><g fill="#d3e4d9"><path d="m32 207 48-18 26 60-54 18Z"/><path d="m315 30 43-24 16 61-49 23Z"/><path d="m214 253 29 4 31 52-52 17Z"/></g><path class="map-route" d="M131 245 199 219 160 155 250 124 310 151" fill="none" stroke="#1c65f5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="131" cy="245" r="11" fill="#fff" stroke="#1c65f5" stroke-width="5"/><circle cx="310" cy="151" r="12" fill="#1c65f5" stroke="#fff" stroke-width="5"/><circle class="rider-map-pulse" cx="250" cy="124" r="20" fill="#1459ee" fill-opacity=".14"/><circle cx="250" cy="124" r="10" fill="#1459ee" stroke="#fff" stroke-width="4"/></svg><span class="map-location map-pickup">Pickup</span><span class="map-location map-destination">Drop-off</span><span class="map-view-tag">Illustrative delivery view</span></div><div class="journey-bottom"><span class="journey-check"><svg class="icon"><use href="#i-check"/></svg></span><span><strong>A clearer way to follow along.</strong><small>From rider assignment to delivery.</small></span></div><div class="message-bubble"><svg class="icon"><use href="#i-chat"/></svg><span>Need to add a little detail?<strong>Chat with your rider in the app.</strong></span></div></div>
+    <section class="tracking-section" id="features" aria-labelledby="tracking-title">
+      <div class="wrap">
+        <div class="tracking-heading">
+          <p class="eyebrow"><span>03</span> FOLLOW YOUR DELIVERY</p>
+          <span class="tracking-heading-note">A little peace of mind, along the way.</span>
+        </div>
+        <div class="tracking-layout">
+          <div class="tracking-copy">
+            <h2 id="tracking-title">Your delivery.<br /><span>In view.</span></h2>
+            <p>From the first pickup to the final handover. Follow your rider’s progress and know what’s next, right in the app.</p>
+            <div class="tracking-stages" role="group" aria-label="Explore the delivery preview">
+              <button type="button" class="tracking-stage" data-tracking-stage="0" aria-pressed="false" aria-controls="tracking-map-panel" disabled>
+                <span class="tracking-step-number">01</span>
+                <span><strong>At pickup</strong><small>Your rider arrives to collect the item.</small></span>
+                <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+              </button>
+              <button type="button" class="tracking-stage is-selected" data-tracking-stage="1" aria-pressed="true" aria-controls="tracking-map-panel" disabled>
+                <span class="tracking-step-number">02</span>
+                <span><strong>On the way</strong><small>Follow the route to your destination.</small></span>
+                <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+              </button>
+              <button type="button" class="tracking-stage" data-tracking-stage="2" aria-pressed="false" aria-controls="tracking-map-panel" disabled>
+                <span class="tracking-step-number">03</span>
+                <span><strong>Delivered</strong><small>A completed journey. One less errand.</small></span>
+                <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>
+              </button>
+            </div>
+            <p class="tracking-interaction-hint" hidden data-tracking-hint>Choose a step to explore the journey <span aria-hidden="true">↗</span></p>
+          </div>
+          <figure class="tracking-preview" id="tracking-map-panel" aria-label="Illustrative delivery tracking preview">
+            <div class="tracking-preview-header">
+              <div class="tracking-preview-brand"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg><span>Delivery journey</span></div>
+              <span class="tracking-preview-label">APP PREVIEW</span>
+            </div>
+            <div class="tracking-map">
+              <svg class="tracking-map-svg" viewBox="0 0 640 390" role="img" aria-labelledby="tracking-map-title tracking-map-description">
+                <title id="tracking-map-title">A delivery route from pickup to destination</title>
+                <desc id="tracking-map-description">An illustrative street map. The blue route follows the streets and the rider marker shows progress along the route.</desc>
+                <defs>
+                  <pattern id="tracking-blocks" width="88" height="78" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)">
+                    <rect x="9" y="9" width="66" height="55" rx="7" fill="#e5e9e5"/>
+                    <path d="M12 33h60M42 12v49" stroke="#eef1eb" stroke-width="2"/>
+                  </pattern>
+                  <filter id="tracking-marker-shadow" x="-100%" y="-100%" width="300%" height="300%">
+                    <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#143064" flood-opacity=".18"/>
+                  </filter>
+                </defs>
+                <rect width="640" height="390" fill="#f2f3ee"/>
+                <rect width="640" height="390" fill="url(#tracking-blocks)"/>
+                <path d="M530-30c-80 78 2 101-47 169s-51 79-38 136 4 95-41 145" fill="none" stroke="#d6e9ed" stroke-width="61"/>
+                <path d="M530-30c-80 78 2 101-47 169s-51 79-38 136 4 95-41 145" fill="none" stroke="#c2dfe7" stroke-width="47"/>
+                <path d="m18 58 100-14 15 63-105 17ZM288 260l75-12 11 83-75 12ZM553 213l72-11 14 93-81 11Z" fill="#d3e3d0" stroke="#e8eee1" stroke-width="4"/>
+                <g stroke="#dce1dc" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M-20 151 660 55M-20 295 660 199M72-30 132 420M235-30 295 420M386-30 445 420M570-30 630 420"/>
+                  <path d="M-20 376 660 280M-20 70 660-26"/>
+                </g>
+                <g stroke="#fff" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                  <path d="M-20 151 660 55M-20 295 660 199M72-30 132 420M235-30 295 420M386-30 445 420M570-30 630 420"/>
+                  <path d="M-20 376 660 280M-20 70 660-26"/>
+                </g>
+                <g fill="#bdcdbb">
+                  <circle cx="47" cy="80" r="7"/><circle cx="71" cy="75" r="8"/><circle cx="97" cy="71" r="6"/>
+                  <circle cx="320" cy="281" r="7"/><circle cx="345" cy="279" r="8"/><circle cx="329" cy="311" r="9"/>
+                </g>
+                <g class="tracking-map-place" fill="#8b998b">
+                  <text x="38" y="105" transform="rotate(-8 38 105)">NEIGHBOURHOOD PARK</text>
+                  <text x="477" y="338" transform="rotate(-8 477 338)">RIVERSIDE</text>
+                </g>
+                <path id="tracking-road" d="M112 276 L267 254 L248 113 L402 91 L417 185" fill="none" stroke="#c9d8f6" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path class="tracking-route-progress" d="M112 276 L267 254 L248 113 L402 91 L417 185" pathLength="1" fill="none" stroke="#1459ee" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1" stroke-dashoffset=".38"/>
+                <g>
+                  <circle cx="112" cy="276" r="9" fill="#fff" stroke="#1459ee" stroke-width="4"/>
+                  <rect x="35" y="305" width="115" height="28" rx="5" fill="white" stroke="#dce3ed"/>
+                  <text x="92.5" y="323" text-anchor="middle" class="tracking-map-label">Pickup point</text>
+                  <circle cx="417" cy="185" r="10" fill="#102c57" stroke="#fff" stroke-width="4"/>
+                  <path d="M414 185h6m-3-3v6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+                  <rect x="446" y="167" width="150" height="30" rx="5" fill="white" stroke="#dce3ed"/>
+                  <text x="521" y="186" text-anchor="middle" class="tracking-map-label">Your destination</text>
+                </g>
+                <g data-tracking-marker transform="translate(290 107)">
+                  <circle r="30" fill="#1459ee" opacity=".09"/>
+                  <circle r="22" fill="white" filter="url(#tracking-marker-shadow)"/>
+                  <circle r="18" fill="#1459ee"/>
+                  <g fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="-8" cy="6" r="3.4"/><circle cx="9" cy="6" r="3.4"/>
+                    <path d="M-8 6-3-2l5 8H-8M2 6h7L5-6H2M-5-3h5M-11-7h6v5h-6Z"/>
+                    <circle cx="2" cy="-10" r="2" fill="white" stroke="none"/>
+                  </g>
+                </g>
+                <g transform="translate(598 28)" stroke="#7d8b99" fill="none" stroke-width="1.3">
+                  <path d="M0 24V4m-4 5 4-5 4 5"/>
+                  <text x="0" y="-2" text-anchor="middle" stroke="none" fill="#7d8b99" font-size="9" font-family="Manrope,Arial,sans-serif">N</text>
+                </g>
+              </svg>
+              <span class="tracking-map-note">Illustrative route</span>
+            </div>
+            <figcaption class="tracking-delivery-status">
+              <div class="tracking-status-line"><span class="tracking-status-dot" aria-hidden="true"></span><strong data-tracking-status>On the way to you</strong><span class="tracking-status-count" data-tracking-count>02 / 03</span></div>
+              <p data-tracking-description>Your rider’s location keeps you in the picture.</p>
+              <div class="tracking-progress" aria-hidden="true"><span class="is-done"></span><span class="is-current"></span><span></span></div>
+            </figcaption>
+            <div class="tracking-preview-footer"><span>Pickup <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg> Destination</span><button type="button" data-tracking-replay hidden><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg> Play journey</button></div>
+            <p class="tracking-screen-reader" aria-live="polite" aria-atomic="true" data-tracking-announcement></p>
+          </figure>
+        </div>
+        <div class="tracking-details">
+          <div><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg><span><strong>See the progress.</strong><small>Delivery status and rider-location updates.</small></span></div>
+          <div><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg><span><strong>Keep in touch.</strong><small>Send a quick message in your request’s chat.</small></span></div>
+          <div><svg class="icon" aria-hidden="true"><use href="#i-box"/></svg><span><strong>Details, all together.</strong><small>Your locations, notes and recipient information.</small></span></div>
+        </div>
+        <p class="tracking-availability">Track your own delivery in the LahuzGo app. Location updates depend on the rider’s connection and location sharing.</p>
       </div>
     </section>
     <section class="faq-section wrap" id="questions" aria-labelledby="faq-title"><div class="faq-intro reveal"><p class="eyebrow">THE LITTLE THINGS</p><h2 id="faq-title">Good to <em>know.</em></h2><p>Still have a question?<br /><a href="mailto:atonlopez55@gmail.com">Let’s talk <span aria-hidden="true">↗</span></a></p></div><div class="faq-list reveal"><details name="common-questions"><summary>What’s the difference between Padala and Pabili?<span class="faq-plus" aria-hidden="true"></span></summary><p>Padala is for sending an item from your pickup location to a recipient. Pabili is for asking a rider to buy the items you specify and bring them to you. Both start in the LahuzGo customer app.</p></details><details name="common-questions"><summary>How do I make a request?<span class="faq-plus" aria-hidden="true"></span></summary><p>Download the customer app on Android, create or sign in to your account, and select Padala or Pabili. Add the locations and required details, then review your request before submitting it. Requests are made in the app, not on this website.</p></details><details name="common-questions"><summary>Can I follow my rider’s progress?<span class="faq-plus" aria-hidden="true"></span></summary><p>Once your rider is assigned, you can follow request status and available rider-location updates in the app. You can also use the request’s chat to stay connected. Location updates depend on the rider’s connection and location sharing.</p></details><details name="common-questions"><summary>Is LahuzGo available on iPhone?<span class="faq-plus" aria-hidden="true"></span></summary><p>The customer app is available for Android. The iOS app is coming soon. For questions about availability, contact us at <a href="mailto:atonlopez55@gmail.com">atonlopez55@gmail.com</a>.</p></details></div></section>
