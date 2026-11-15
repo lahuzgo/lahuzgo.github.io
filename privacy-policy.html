@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="LahuzGo Customer app Privacy Policy: the information we handle, how it is used, and how to exercise your privacy and account deletion choices." />
+    <meta name="description" content="LahuzGo Customer Privacy Policy for Pa-angkas rides, Padala and Pabili: account, location, fare, booking and chat data, sharing and deletion choices." />
     <meta name="theme-color" content="#07162f" />
     <title>Privacy Policy · LahuzGo Customer</title>
     <link rel="icon" href="assets/lahuzgo-launcher-icon.png" />
@@ -21,9 +21,9 @@
 
       <main>
         <section class="policy-hero" aria-labelledby="policy-title">
-          <div class="policy-eyebrow">Customer app · Updated October 2, 2026</div>
+          <div class="policy-eyebrow">Customer app · Updated November 16, 2026</div>
           <h1 id="policy-title">Privacy <span>Policy</span></h1>
-          <p>This policy explains how the LahuzGo Customer Android app handles information for Padala and Pabili delivery requests. LahuzGo is operated by Saldester Lopez, based in Barangay North, Ormoc City, Leyte, Philippines. This page is for the Customer app, not the separate Rider or Admin apps.</p>
+          <p>This policy explains how the LahuzGo Customer Android app handles information for Pa-angkas motorcycle rides, Padala deliveries and Pabili shopping requests. LahuzGo is operated by Saldester Lopez, based in Barangay North, Ormoc City, Leyte, Philippines. This page is for the Customer app, not the separate Rider or Admin apps.</p>
           <div class="policy-summary">
             <div class="policy-summary-card"><small>Location</small>Only while you use map features</div>
             <div class="policy-summary-card"><small>Your account</small>In-app and online deletion options</div>
@@ -45,7 +45,7 @@
             <h2>Information the app handles</h2>
             <ul class="policy-data-grid">
               <li><strong>Account and contact details:</strong> your name, mobile number, contact email, chosen profile photo, and account/security records. Supabase Auth processes sign-in credentials; LahuzGo does not store your password in the customer profile table.</li>
-              <li><strong>Delivery requests:</strong> Padala or Pabili details, one or more pickup names and addresses, landmarks and map pins, destination details, recipient name and phone number, item descriptions and quantities, delivery instructions, booking status, and related service/fee records.</li>
+              <li><strong>Bookings and fare quotes:</strong> the selected service, pickup and destination addresses and map pins, landmarks, instructions, booking status and service/fee records. Pa-angkas includes the passenger contact details linked to the booking, fare quote, route distance and estimated travel time, assigned rider, and pickup, trip-start and completion updates. Padala and Pabili also include pickup contacts, recipient name and phone number, item descriptions and quantities, and store or delivery instructions.</li>
               <li><strong>Messages and support:</strong> text you send in a booking conversation; photos or videos you choose to attach; feedback messages, contact email, and screenshots you choose to submit to support.</li>
               <li><strong>Notifications and device data:</strong> a push-notification token and platform information needed to send booking, chat, and account notices, plus notification preferences.</li>
             </ul>
@@ -53,18 +53,18 @@
 
           <section class="policy-section" id="location">
             <h2>Location and map searches</h2>
-            <p>When you use the map, choose your current location, search for a place, or request a route, the app handles the search text and/or coordinates needed for that feature. Android location access is requested only while using the app; the Customer app does not request background location access. A pin you submit becomes part of your delivery request.</p>
-            <p>Mapbox provides maps, place search/geocoding, and route services. Temporary map search results and route estimates are not saved in LahuzGo's booking database.</p>
+            <p>When you use the map, choose your current location, search for a place, or request a route, the app handles the search text and/or coordinates needed for that feature. Android location access is requested only while using the app; the Customer app does not request background location access. Pickup and destination pins you submit become part of your ride or delivery booking.</p>
+            <p>Mapbox provides maps, place search/geocoding, and route services. To prepare a Pa-angkas fare, LahuzGo stores a fare quote linked to your account with the pickup and destination, route distance, estimated travel time, fare and quote expiry. The details used for a submitted trip are also saved with that booking. A quote's expiry controls how long it can be used to submit a booking; it does not mean its stored record is erased at that instant.</p>
           </section>
 
           <section class="policy-section" id="use">
             <h2>How information is used</h2>
-            <p>We use these details to create and protect your account, verify your mobile number, save addresses, submit and coordinate deliveries, match requests with riders, show delivery progress, communicate with you, provide customer support, send notifications, prevent misuse, and maintain the service.</p>
+            <p>We use these details to create and protect your account, verify your mobile number, save addresses, calculate and review Pa-angkas fares, submit and coordinate rides and deliveries, match bookings with riders, show pickup and trip or delivery progress, communicate with you, provide customer support, send booking, chat and account notifications, prevent misuse, and maintain the service.</p>
           </section>
 
           <section class="policy-section" id="sharing">
             <h2>Who receives information</h2>
-            <p>Information needed to complete a request is available to the LahuzGo operations/support team and the rider assigned to that request. This can include pickup and destination details, recipient contact details, item descriptions, instructions, and relevant conversation messages. We do not make customer account or booking data public.</p>
+            <p>Information needed to complete a booking is available to the LahuzGo operations/support team and the rider assigned to that booking. For Pa-angkas, this includes the passenger contact information needed for pickup, pickup and destination, fare, instructions, relevant messages and trip status. For Padala and Pabili, it can also include recipient contact details and item descriptions. The app may show you assigned-rider details and the location or status updates needed to follow your booking. We do not make customer account or booking data public.</p>
             <p>We use service providers for specific functions: Supabase for authentication, database, private file storage, and realtime app features; Mapbox for maps, place search/geocoding, and route services; Semaphore for SMS verification messages; and Firebase Cloud Messaging (Google) for push notifications. These providers process the information needed for their services under their own terms and privacy practices. We do not sell personal information.</p>
           </section>
 
@@ -77,7 +77,7 @@
           <section class="policy-section" id="retention">
             <h2>Retention and account deletion</h2>
             <p>We keep account and request information while needed to provide the service, maintain safety, resolve support issues, and meet applicable legal obligations. To delete your account, use <strong>Account → Delete account</strong> in the app, or follow the <a href="account-deletion.html">external account deletion instructions</a>.</p>
-            <div class="policy-callout"><strong>Deletion timing:</strong> in-app requests have a 7-day grace period. Signing in during those 7 days cancels the request. Active Padala or Pabili deliveries must be finished or cancelled before deletion can proceed. Scheduled cleanup removes the account and associated customer profile, saved addresses, delivery/conversation history, messages, uploaded account files, and push token when no active operation remains. Cleanup runs periodically, so it may happen after—not exactly at—the 7-day point.</div>
+            <div class="policy-callout"><strong>Deletion timing:</strong> in-app requests have a 7-day grace period. Signing in during those 7 days cancels the request. Open Pa-angkas rides, Padala deliveries or Pabili bookings must be finished or cancelled before deletion can proceed, including requests still waiting for a rider. Scheduled cleanup removes the account and associated customer profile, saved addresses, ride and delivery/conversation history, fare quotes linked to the account, messages, uploaded account files, and push token when no active operation remains. Cleanup runs periodically, so it may happen after—not exactly at—the 7-day point.</div>
             <p>Limited records may need to be retained where required for legal, safety, fraud-prevention, or dispute-resolution reasons. Provider backups may expire on the provider's own backup schedule. You may separately need to clear local app files from your phone.</p>
           </section>
 
