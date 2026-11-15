@@ -70,6 +70,7 @@
  .service-switcher{margin-bottom:22px}.service-choice{padding:15px 10px;gap:5px;min-height:94px;flex-direction:column;align-items:flex-start;justify-content:center}.service-choice+.service-choice{padding-left:14px}
  .service-choice-name{display:block;font-size:18px;white-space:nowrap}.service-choice-name small{display:block;font-size:10px;margin-top:3px;font-weight:500}.service-choice-index{font-size:8px;margin-top:0}.service-choice>.icon{display:none}
  .service-story{grid-template-columns:1fr;gap:28px}.service-photo{height:auto;aspect-ratio:1.5}.service-photo-label{top:15px;left:15px;font-size:10px;padding:9px 11px}
+ #panel-angkas .service-photo-label{top:auto;bottom:15px}
  .service-route{min-height:76px;padding:17px 20px;gap:16px}.service-route-stop strong{font-size:11px}.service-route-stop small{font-size:7px}
  .service-detail{padding:0 2px}.service-overline{font-size:8px}.service-detail h3{font-size:38px;margin-block:16px}.service-description{font-size:13px;max-width:100%}
  .service-inclusions{margin-block:21px 24px;gap:12px}.service-inclusions>li{font-size:12px}.service-action{min-width:214px;min-height:51px}
