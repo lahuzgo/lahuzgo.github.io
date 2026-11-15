@@ -36,7 +36,7 @@
   window.addEventListener('scroll', updateHeader, {passive:true});
   updateHeader();
 
-  // Both descriptions remain readable without JS. Enhance into tabs only when ready.
+  // Every service remains readable without JS. Enhance into tabs only when ready.
   const tabs = [...document.querySelectorAll('[data-service-tab]')];
   const panels = tabs.map(tab => document.getElementById(tab.getAttribute('aria-controls')));
   const prepareServiceImage = index => {
@@ -53,7 +53,7 @@
     });
     if (focus) tabs[index].focus();
   };
-  if (tabs.length === 2 && panels.every(Boolean)) {
+  if (tabs.length >= 2 && panels.every(Boolean)) {
     document.querySelector('.service-switcher').hidden = false;
     panels.forEach((panel, index) => {
       panel.setAttribute('role', 'tabpanel');
