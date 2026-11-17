@@ -2,19 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#1459ee" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="LahuzGo" />
   <meta name="robots" content="noindex,follow" />
   <meta name="description" content="Sign in or create your LahuzGo customer account. Use the same mobile number and account in the LahuzGo app." />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://hthasqnrljdwbcfjtsbp.supabase.co wss://hthasqnrljdwbcfjtsbp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https://api.mapbox.com https://hthasqnrljdwbcfjtsbp.supabase.co; media-src 'self' blob: https://hthasqnrljdwbcfjtsbp.supabase.co; connect-src 'self' https://api.mapbox.com https://hthasqnrljdwbcfjtsbp.supabase.co wss://hthasqnrljdwbcfjtsbp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>Customer login — LahuzGo</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/lahuzgo-launcher-icon.png" />
+  <link rel="manifest" href="customer.webmanifest" />
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="customer-access.css?v=google-20261117" />
+  <link rel="stylesheet" href="customer-access.css?v=customer-web-20261117" />
+  <link rel="stylesheet" href="customer-portal.css?v=customer-web-20261117" />
   <script src="assets/vendor/supabase-2.117.3.js" defer></script>
-  <script type="module" src="customer-access.js?v=concurrent-20261117"></script>
+  <script type="module" src="customer-access.js?v=customer-web-20261117"></script>
 </head>
 <body>
   <a class="skip" href="#access">Skip to customer access</a>
@@ -92,8 +96,8 @@
         <section id="account-panel" class="state-panel" hidden aria-labelledby="account-title">
           <span class="state-icon success"><svg class="icon"><use href="#check"/></svg></span><p class="eyebrow">YOUR CUSTOMER ACCOUNT</p><h2 id="account-title" tabindex="-1">Welcome to LahuzGo.</h2><p class="intro" id="account-name"></p>
           <div class="account-summary"><span>Verified mobile number</span><strong id="account-phone"></strong><span>Gmail address</span><strong id="account-email"></strong></div>
-          <p class="availability-note">Your account is ready. Online booking is not available on the website yet. Pa-angkas, Padala and Pabili bookings are available in the customer app.</p>
-          <a class="primary-button" href="./#download"><span>Get the customer app</span><svg class="icon"><use href="#arrow"/></svg></a><button id="sign-out" class="outline-button" type="button">Sign out</button>
+          <p class="availability-note">Getting your rides, errands and conversations ready…</p>
+          <button id="sign-out" class="outline-button" type="button">Sign out</button>
         </section>
 
         <section id="retry-panel" class="state-panel" hidden aria-labelledby="retry-title"><span class="state-icon"><svg class="icon"><use href="#shield"/></svg></span><h2 id="retry-title" tabindex="-1">Let’s reconnect.</h2><p class="intro">We couldn’t check your session. Check your connection and try again.</p><button id="retry-session" class="primary-button" type="button"><span>Try again</span><svg class="icon"><use href="#arrow"/></svg></button></section>
@@ -102,6 +106,7 @@
       </div>
     </section>
   </main>
+  <div id="customer-portal" hidden></div>
   <footer class="access-bottom"><span>© <span id="copyright-year">2026</span> LahuzGo.</span><span>Local rides. Everyday errands.</span></footer>
   <dialog id="help-dialog" aria-labelledby="help-title"><div class="help-heading"><h2 id="help-title">A little help signing in.</h2><button id="help-close" class="icon-button" type="button" aria-label="Close help"><svg class="icon"><use href="#close"/></svg></button></div><p>Use the mobile number and password from your LahuzGo customer account. You can reset a forgotten password from the customer app’s sign-in screen.</p><p>If you need a hand, our team can help.</p><a class="primary-button" href="mailto:atonlopez55@gmail.com?subject=LahuzGo%20customer%20account%20help"><span>Contact LahuzGo</span><svg class="icon"><use href="#arrow"/></svg></a></dialog>
 </body>

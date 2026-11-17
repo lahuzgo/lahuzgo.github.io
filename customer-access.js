@@ -1,10 +1,10 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
-  accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, timedFetch,
-  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=concurrent-20261117';
+  accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, customerApiFetch,
+  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=portal-preview-20261117';
 
 const $ = id => document.getElementById(id);
 const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry'];
-let access, client, activeStorage, busy = false, stage = 'checking', registrationStep = 'phone';
+let access, client, activeStorage, portal, busy = false, stage = 'checking', registrationStep = 'phone';
 let pollTimer, emailTimer, emailSequence = 0, lastHelpTrigger;
 const authStorage = {
   getItem: key => activeStorage.getItem(key),
@@ -29,7 +29,7 @@ function createAccess(remember) {
   client ??= globalThis.supabase.createClient(BACKEND_URL, PUBLISHABLE_KEY, {
     auth: { storageKey: AUTH_STORAGE_KEY, storage: authStorage, persistSession: true,
       autoRefreshToken: true, detectSessionInUrl: false, flowType: 'pkce' },
-    global: { fetch: timedFetch(globalThis.fetch.bind(globalThis)), headers: { 'X-Client-Info': 'lahuzgo-customer-web/1.0' } },
+    global: { fetch: customerApiFetch(globalThis.fetch.bind(globalThis)), headers: { 'X-Client-Info': 'lahuzgo-customer-web/1.0' } },
   });
   // Temporary logins keep their own installation identity per tab. A second
   // tab's sign-in must not rebind this tab's device record to another session.
@@ -39,6 +39,10 @@ function createAccess(remember) {
     authStorage, userAgent: navigator.userAgent });
 }
 function setStage(next, { focus = true } = {}) {
+  if (next !== 'account' && portal) {
+    portal.stop(); portal = null; document.body.classList.remove('portal-active');
+    document.querySelector('.skip').href = '#access';
+  }
   stage = next;
   for (const panel of panels) $(`${panel}-panel`).hidden = panel !== next;
   document.title = `${next === 'register' ? 'Create customer account' : next === 'account' ? 'Your customer account' : 'Customer login'} — LahuzGo`;
@@ -97,7 +101,16 @@ async function applyState(state) {
     $('account-phone').textContent = prettyPhone(profile.phone || access.user.phone);
     $('account-email').textContent = profile.contact_email || 'Not provided';
     $('login-password').value = ''; $('register-password').value = ''; $('confirm-password').value = '';
-    setStage('account');
+    if (portal) portal.updateProfile(profile);
+    else {
+      setStage('account', { focus: false });
+      const { CustomerPortal } = await import('./customer-portal.js?v=preview-20261117');
+      portal = new CustomerPortal({ root: $('customer-portal'), client, profile, onSignOut: async () => {
+        await access.signOut(); setStage('login'); emptyError(); history.replaceState(null, '', 'login.html');
+      } });
+      document.body.classList.add('portal-active'); document.querySelector('.skip').href = '#customer-home';
+      await portal.start();
+    }
   } else if (state.state === 'approval') {
     const first = stage !== 'approval';
     setStage('approval', { focus: first });
@@ -118,7 +131,9 @@ async function applyState(state) {
   } else if (state.state === 'register-details') {
     $('verified-phone-label').textContent = `${prettyPhone(state.phone)} · verified`;
     setRegisterStep('details');
-  } else if (state.state === 'retry') setStage('retry');
+  } else if (state.state === 'retry') {
+    if (portal) portal.connection('offline'); else setStage('retry');
+  }
   else {
     const requested = new URL(location.href).searchParams.get('mode');
     if (requested === 'register') {

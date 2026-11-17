@@ -1,0 +1,11 @@
+{
+  "id": "./login.html",
+  "name": "LahuzGo Customer",
+  "short_name": "LahuzGo",
+  "start_url": "./login.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f8faff",
+  "theme_color": "#1459ee",
+  "icons": [{ "src": "assets/lahuzgo-launcher-icon.png", "sizes": "1254x1254", "type": "image/png", "purpose": "any" }]
+}

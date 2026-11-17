@@ -6,6 +6,12 @@ export const REGISTRATION_STORAGE_KEY = 'lahuzgo.customer.registration.v1';
 export const RESEND_MS = 300_000;
 export const OAUTH_STORAGE_KEY = 'lahuzgo.customer.google.v1';
 export const CUSTOMER_CALLBACK_URL = 'https://lahuzgo.github.io/login.html';
+export const LOCAL_CUSTOMER_ORIGIN = 'http://localhost:3000';
+// This exact local origin is the project's existing Site URL. Other origins
+// never become OAuth destinations through query parameters or browser input.
+export function customerCallbackURL(origin) {
+  return origin === LOCAL_CUSTOMER_ORIGIN ? `${LOCAL_CUSTOMER_ORIGIN}/` : CUSTOMER_CALLBACK_URL;
+}
 export const SESSION_PREFERENCE_KEY = 'lahuzgo.customer.storage.v1';
 export function rememberBrowserSession(local, temporary, googleIntent = null) {
   if (googleIntent) return googleIntent.remember;
@@ -64,14 +70,23 @@ export function timedFetch(fetcher, timeout = 20_000) {
     finally { clearTimeout(timer); options.signal?.removeEventListener('abort', relay); }
   };
 }
+export function customerApiFetch(fetcher) {
+  const standard = timedFetch(fetcher), quote = timedFetch(fetcher, 35_000), media = timedFetch(fetcher, 100_000);
+  return (input, options) => {
+    const path = new URL(typeof input === 'string' || input instanceof URL ? input : input.url, BACKEND_URL).pathname;
+    const request = path.startsWith('/storage/v1/object/chat-media/') ? media : path === '/functions/v1/angkas-quote' ? quote : standard;
+    return request(input, options);
+  };
+}
 function resultValue(result) { if (result?.error) throw result.error; return result?.data; }
 function readJSON(storage, key) { try { return JSON.parse(storage.getItem(key) ?? 'null'); } catch { return null; } }
 
 export class CustomerAccess {
-  constructor(client, { deviceStorage, registrationStorage, authStorage, crypto = globalThis.crypto, userAgent = '', now = () => Date.now() }) {
+  constructor(client, { deviceStorage, registrationStorage, authStorage, crypto = globalThis.crypto, userAgent = '', now = () => Date.now(), locationOrigin = globalThis.location?.origin }) {
     this.client = client; this.deviceStorage = deviceStorage; this.registrationStorage = registrationStorage;
     this.crypto = crypto; this.userAgent = userAgent; this.now = now; this.authStorage = authStorage;
     this.profile = null; this.user = null; this.alertId = null; this.challenge = null;
+    this.callbackURL = customerCallbackURL(locationOrigin);
     this.registration = readJSON(registrationStorage, REGISTRATION_STORAGE_KEY);
   }
   credentials(create = true) {
@@ -126,12 +141,12 @@ export class CustomerAccess {
     this.registrationStorage.setItem(OAUTH_STORAGE_KEY, JSON.stringify({ remember: Boolean(remember), startedAt: this.now() }));
     try {
       const data = resultValue(await this.client.auth.signInWithOAuth({ provider: 'google', options: {
-        redirectTo: CUSTOMER_CALLBACK_URL, skipBrowserRedirect: true, queryParams: { prompt: 'select_account' },
+        redirectTo: this.callbackURL, skipBrowserRedirect: true, queryParams: { prompt: 'select_account' },
       } }));
       const url = new URL(data?.url);
       if (url.origin !== BACKEND_URL || url.pathname !== '/auth/v1/authorize'
         || url.searchParams.get('provider') !== 'google'
-        || url.searchParams.get('redirect_to') !== CUSTOMER_CALLBACK_URL)
+        || url.searchParams.get('redirect_to') !== this.callbackURL)
         throw new CustomerAccessError('Could not open secure Google sign-in. Please try again.');
       return url.href;
     } catch (error) { this.clearGoogleIntent(); throw error; }
