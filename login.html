@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="customer-access.css?v=gmail-recovery-20261117" />
   <link rel="stylesheet" href="customer-portal.css?v=customer-web-20261117" />
   <script src="assets/vendor/supabase-2.117.3.js" defer></script>
-  <script type="module" src="customer-access.js?v=gmail-recovery-20261117"></script>
+  <script type="module" src="customer-access.js?v=sms-login-20261118"></script>
 </head>
 <body>
   <a class="skip" href="#access">Skip to customer access</a>
@@ -96,12 +96,12 @@
         </section>
 
         <section id="approval-panel" hidden aria-labelledby="approval-title">
-          <span class="state-icon"><svg class="icon"><use href="#phone"/></svg></span><h2 id="approval-title" tabindex="-1">One quick security check.</h2><p class="intro">Approve this sign-in in LahuzGo on your other device, or verify with a code below.</p>
-          <p class="security-note">Approving this browser signs out your other device, just like the customer app.</p>
-          <div class="verification-options"><button id="approval-sms" class="outline-button" type="button" hidden>Text me a code</button><button id="approval-email" class="outline-button" type="button" hidden>Email me a code</button></div>
+          <span class="state-icon"><svg class="icon"><use href="#phone"/></svg></span><h2 id="approval-title" tabindex="-1">Check your messages.</h2><p class="intro">Verify your sign-in with the 6-digit code sent by SMS to your registered mobile number.</p>
+          <p class="security-note">The code expires in 5 minutes. Keep it private. Your other devices stay signed in.</p>
+          <div class="verification-options"><button id="approval-sms" class="outline-button" type="button" hidden>Send SMS code</button></div>
           <p id="approval-options-note" class="field-hint" aria-live="polite"></p>
           <form id="approval-code-form" hidden><div class="field"><label for="approval-code">6-digit verification code</label><input class="otp-input" id="approval-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /><p class="field-hint" id="approval-code-destination"></p></div><button class="primary-button" type="submit"><span>Verify &amp; sign in</span><svg class="icon"><use href="#arrow"/></svg></button><button id="approval-resend" class="text-button resend-button" type="button">Resend code</button></form>
-          <div class="secondary-actions"><button id="approval-check" class="text-button" type="button">Check approval</button><button id="approval-cancel" class="text-button" type="button">Cancel sign-in</button></div>
+          <div class="secondary-actions"><button id="approval-cancel" class="text-button" type="button">Back to sign in</button></div>
         </section>
 
         <section id="account-panel" class="state-panel" hidden aria-labelledby="account-title">

@@ -3,6 +3,7 @@ export const PUBLISHABLE_KEY = 'sb_publishable_cgM-8bA4NXIyqSyE8YzP7A_Z5ydNuhl';
 export const AUTH_STORAGE_KEY = 'lahuzgo.customer.auth.v1';
 export const DEVICE_STORAGE_KEY = 'lahuzgo.customer.browser.v1';
 export const REGISTRATION_STORAGE_KEY = 'lahuzgo.customer.registration.v1';
+export const LOGIN_OTP_STORAGE_KEY = 'lahuzgo.customer.login-otp.v1';
 export const RESEND_MS = 300_000;
 export const OAUTH_STORAGE_KEY = 'lahuzgo.customer.google.v1';
 export const CUSTOMER_CALLBACK_URL = 'https://lahuzgo.github.io/login.html';
@@ -71,10 +72,11 @@ export function timedFetch(fetcher, timeout = 20_000) {
   };
 }
 export function customerApiFetch(fetcher) {
-  const standard = timedFetch(fetcher), quote = timedFetch(fetcher, 35_000), media = timedFetch(fetcher, 100_000);
+  const standard = timedFetch(fetcher), quote = timedFetch(fetcher, 35_000), media = timedFetch(fetcher, 100_000), loginOtp = timedFetch(fetcher, 45_000);
   return (input, options) => {
     const path = new URL(typeof input === 'string' || input instanceof URL ? input : input.url, BACKEND_URL).pathname;
-    const request = path.startsWith('/storage/v1/object/chat-media/') ? media : path === '/functions/v1/angkas-quote' ? quote : standard;
+    const request = path.startsWith('/storage/v1/object/chat-media/') ? media : path === '/functions/v1/angkas-quote' ? quote
+      : path === '/functions/v1/customer-device-auth' ? loginOtp : standard;
     return request(input, options);
   };
 }
@@ -167,6 +169,7 @@ export class CustomerAccess {
     finally { this.clearGoogleIntent(); }
   }
   async registerDevice() {
+    this.clearLoginChallenge();
     const credential = this.credentials();
     const browser = /Edg\//.test(this.userAgent) ? 'Edge' : /CriOS|Chrome\//.test(this.userAgent) ? 'Chrome'
       : /Firefox|FxiOS/.test(this.userAgent) ? 'Firefox' : /Safari\//.test(this.userAgent) ? 'Safari' : 'Browser';
@@ -186,9 +189,15 @@ export class CustomerAccess {
       .eq('actor_installation_key', this.credentials().key).maybeSingle());
     if (alert?.status === 'trusted') {
       await this.profileFromServer(); await this.touchDevice();
+      this.clearLoginChallenge();
       return { state: 'ready', profile: this.profile };
     }
-    if (alert?.status === 'pending' && typeof alert.approval_required === 'boolean') return { state: 'approval' };
+    if (alert?.status === 'pending' && typeof alert.approval_required === 'boolean') {
+      const saved = readJSON(this.registrationStorage, LOGIN_OTP_STORAGE_KEY);
+      if (saved?.alertId === this.alertId && saved.channel === 'sms' && /^[0-9a-f]{64}$/.test(saved.id)
+        && Number.isFinite(saved.resendAt) && saved.resendAt <= this.now() + RESEND_MS) this.challenge = saved;
+      return { state: 'approval' };
+    }
     await this.clearSession();
     throw new CustomerAccessError('This sign-in was cancelled or declined. Please sign in again.', 'access_denied');
   }
@@ -298,11 +307,18 @@ export class CustomerAccess {
     return data;
   }
   async verificationOptions() { return this.verificationAction({ action: 'options' }); }
+  clearLoginChallenge() {
+    this.challenge = null;
+    try { this.registrationStorage.removeItem(LOGIN_OTP_STORAGE_KEY); } catch { /* Opaque challenge only; trust is checked on the server. */ }
+  }
   async sendApprovalCode(channel) {
-    if (!['sms', 'email'].includes(channel)) throw new CustomerAccessError('Choose a verification method.');
+    if (channel !== 'sms') throw new CustomerAccessError('Use the SMS code sent to your registered mobile number.');
+    if (this.challenge && this.now() < this.challenge.resendAt) throw new CustomerAccessError('Please wait before requesting another code.');
     const data = await this.verificationAction({ action: 'start', channel });
-    if (typeof data.challenge_id !== 'string' || !data.challenge_id) throw new CustomerAccessError('Could not send a verification code.');
-    this.challenge = { id: data.challenge_id, channel, resendAt: this.now() + RESEND_MS };
+    if (!/^[0-9a-f]{64}$/.test(data.challenge_id ?? '')) throw new CustomerAccessError('Could not send a verification code.');
+    this.challenge = { id: data.challenge_id, channel, alertId: this.alertId, resendAt: this.now() + RESEND_MS,
+      destination: data.destination ?? 'your registered mobile number' };
+    try { this.registrationStorage.setItem(LOGIN_OTP_STORAGE_KEY, JSON.stringify(this.challenge)); } catch { /* Verification still works until this tab reloads. */ }
     return data;
   }
   async verifyApprovalCode(code) {
@@ -311,6 +327,7 @@ export class CustomerAccess {
     return this.checkApproval();
   }
   async clearSession() {
+    this.clearLoginChallenge();
     try { await this.client.auth.signOut({ scope: 'local' }); } catch { /* Never report a failed login as accepted. */ }
     for (const key of [AUTH_STORAGE_KEY, AUTH_STORAGE_KEY + '-user', AUTH_STORAGE_KEY + '-code-verifier']) {
       try { this.authStorage?.removeItem(key); } catch { /* The browser may have disabled storage. */ }

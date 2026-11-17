@@ -1,7 +1,7 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
   accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, customerApiFetch,
-  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=portal-preview-20261117';
-import { CustomerRecovery } from './customer-recovery.js';
+  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=sms-login-20261118';
+import { CustomerRecovery } from './customer-recovery.js?v=sms-login-20261118';
 
 const $ = id => document.getElementById(id);
 const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry', 'recovery', 'recovery-success'];
@@ -123,17 +123,16 @@ async function applyState(state) {
     setStage('approval', { focus: first });
     if (first) {
       $('approval-code-form').hidden = true;
-      $('approval-options-note').textContent = 'Checking available verification methods…';
+      $('approval-sms').hidden = true;
+      $('approval-options-note').textContent = 'Preparing your SMS verification…';
       try {
-        const options = await access.verificationOptions();
-        $('approval-sms').hidden = options.sms_available !== true;
-        $('approval-email').hidden = options.email_available !== true;
-        $('approval-sms').textContent = options.phone ? `Text ${options.phone}` : 'Text me a code';
-        $('approval-email').textContent = options.email ? `Email ${options.email}` : 'Email me a code';
-        $('approval-options-note').textContent = options.sms_available || options.email_available
-          ? 'Choose where to receive a verification code.' : 'Approve this sign-in on your other device. If you need help, contact LahuzGo.';
-      } catch { $('approval-options-note').textContent = 'You can still approve this sign-in on your other device, or check again shortly.'; }
-      pollTimer = setInterval(pollApproval, 5000);
+        if (access.challenge) showLoginCode(access.challenge.destination);
+        else await sendApproval();
+      } catch (error) {
+        $('approval-options-note').textContent = 'We couldn’t send your SMS code. Try again below.';
+        $('approval-sms').hidden = false;
+        showError(error);
+      }
     }
   } else if (state.state === 'register-details') {
     $('verified-phone-label').textContent = `${prettyPhone(state.phone)} · verified`;
@@ -285,22 +284,22 @@ $('register-details-form').addEventListener('submit', event => {
   run(async () => applyState(await access.completeRegistration({ first: $('first-name').value, last: $('last-name').value,
     gmail: $('register-gmail').value, password, confirmation: $('confirm-password').value, terms: $('terms-consent').checked })));
 });
-for (const channel of ['sms', 'email']) $(`approval-${channel}`).addEventListener('click', () => run(() => sendApproval(channel)));
-async function sendApproval(channel) {
-  const data = await access.sendApprovalCode(channel);
+$('approval-sms').addEventListener('click', () => run(() => sendApproval()));
+function showLoginCode(destination) {
+  $('approval-sms').hidden = true;
   $('approval-code-form').hidden = false; $('approval-code').value = '';
-  $('approval-code-destination').textContent = `Code sent to ${data.destination ?? 'your verified contact'}.`;
+  $('approval-code-destination').textContent = `Code sent to ${destination ?? 'your registered mobile number'}.`;
+  $('approval-options-note').textContent = 'Enter the latest SMS code to open your account.';
+}
+async function sendApproval() {
+  const data = await access.sendApprovalCode('sms');
+  showLoginCode(data.destination);
 }
 $('approval-code-form').addEventListener('submit', event => {
   event.preventDefault(); if (!$('approval-code-form').reportValidity()) return;
   run(async () => applyState(await access.verifyApprovalCode($('approval-code').value.trim())));
 });
-$('approval-resend').addEventListener('click', () => run(() => sendApproval(access.challenge.channel)));
-$('approval-check').addEventListener('click', () => run(async () => {
-  const state = await access.checkApproval();
-  if (state.state === 'approval') $('approval-options-note').textContent = 'Still waiting for approval. Open LahuzGo on your other device or use a verification code.';
-  await applyState(state);
-}));
+$('approval-resend').addEventListener('click', () => run(() => sendApproval()));
 for (const id of ['approval-cancel', 'sign-out']) $(id).addEventListener('click', () => run(async () => {
   await access.signOut(); setStage('login'); emptyError(); history.replaceState(null, '', 'login.html');
 }));

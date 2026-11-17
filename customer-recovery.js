@@ -1,4 +1,4 @@
-import { CustomerAccessError, validGmail, passwordRequirements } from './customer-auth.js?v=portal-preview-20261117';
+import { CustomerAccessError, validGmail, passwordRequirements } from './customer-auth.js?v=sms-login-20261118';
 const messages = {
   invalid_gmail: 'Enter the Gmail address registered to your LahuzGo account.',
   rate_limited: 'Too many requests. Please wait before requesting another code.',
