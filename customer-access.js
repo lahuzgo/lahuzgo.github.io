@@ -1,5 +1,6 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
-  accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, timedFetch } from './customer-auth.js';
+  accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, timedFetch,
+  pendingGoogleSignIn } from './customer-auth.js?v=google-20261117';
 
 const $ = id => document.getElementById(id);
 const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry'];
@@ -30,7 +31,7 @@ function createAccess(remember, { clearOther = false } = {}) {
   }
   client ??= globalThis.supabase.createClient(BACKEND_URL, PUBLISHABLE_KEY, {
     auth: { storageKey: AUTH_STORAGE_KEY, storage: authStorage, persistSession: true,
-      autoRefreshToken: true, detectSessionInUrl: false },
+      autoRefreshToken: true, detectSessionInUrl: false, flowType: 'pkce' },
     global: { fetch: timedFetch(globalThis.fetch.bind(globalThis)), headers: { 'X-Client-Info': 'lahuzgo-customer-web/1.0' } },
   });
   access = new CustomerAccess(client, { deviceStorage: local, registrationStorage: temporary,
@@ -165,6 +166,11 @@ $('login-form').addEventListener('submit', event => {
     $('login-password').value = ''; await applyState(result);
   });
 });
+$('google-sign-in').addEventListener('click', () => run(async () => {
+  createAccess($('remember-me').checked, { clearOther: true });
+  const destination = await access.startGoogleSignIn($('remember-me').checked);
+  location.assign(destination);
+}));
 $('register-phone-form').addEventListener('submit', event => {
   event.preventDefault();
   if (!checkPhoneInput($('register-phone')) || !$('register-phone-form').reportValidity()) return;
@@ -256,6 +262,25 @@ setInterval(async () => {
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { updateCooldowns(); pollApproval(); } });
 $('copyright-year').textContent = String(new Date().getFullYear());
 try {
-  const remember = Boolean(localStorage.getItem(AUTH_STORAGE_KEY)); $('remember-me').checked = remember;
-  createAccess(remember); await applyState(await access.restore());
+  const params = new URL(location.href).searchParams;
+  const fragment = new URLSearchParams(location.hash.slice(1));
+  const code = params.get('code'), flowId = params.get('sb_flow_id');
+  const providerError = params.get('error') ?? fragment.get('error');
+  const googleIntent = pendingGoogleSignIn(sessionStorage);
+  const remember = googleIntent?.remember ?? Boolean(localStorage.getItem(AUTH_STORAGE_KEY));
+  $('remember-me').checked = remember;
+  createAccess(remember);
+  // Remove callback codes/errors before further network requests or navigation.
+  if (code || providerError || fragment.has('access_token')) history.replaceState(null, '', 'login.html');
+  if (fragment.has('access_token')) {
+    access.clearGoogleIntent();
+    throw new CustomerAccessError('Please choose Continue with Google to start a secure sign-in.');
+  }
+  if (providerError) {
+    access.clearGoogleIntent();
+    throw new CustomerAccessError(providerError === 'access_denied'
+      ? 'Google sign-in was cancelled. Please try again.' : 'Could not finish Google sign-in. Please try again.');
+  }
+  if (code) await applyState(await access.finishGoogleSignIn(code, flowId));
+  else { access.clearGoogleIntent(); await applyState(await access.restore()); }
 } catch (error) { setStage('login', { focus: false }); showError(error); }

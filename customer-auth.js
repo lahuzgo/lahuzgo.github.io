@@ -4,6 +4,13 @@ export const AUTH_STORAGE_KEY = 'lahuzgo.customer.auth.v1';
 export const DEVICE_STORAGE_KEY = 'lahuzgo.customer.browser.v1';
 export const REGISTRATION_STORAGE_KEY = 'lahuzgo.customer.registration.v1';
 export const RESEND_MS = 300_000;
+export const OAUTH_STORAGE_KEY = 'lahuzgo.customer.google.v1';
+export const CUSTOMER_CALLBACK_URL = 'https://lahuzgo.github.io/login.html';
+export function pendingGoogleSignIn(storage, now = Date.now()) {
+  const value = readJSON(storage, OAUTH_STORAGE_KEY);
+  return typeof value?.remember === 'boolean' && Number.isFinite(value.startedAt)
+    && value.startedAt <= now && now - value.startedAt < 30 * 60_000 ? value : null;
+}
 
 export class CustomerAccessError extends Error {
   constructor(message, code = 'access_error') { super(message); this.name = 'CustomerAccessError'; this.code = code; }
@@ -23,8 +30,10 @@ export function validGmail(value) { return /^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@gma
 export function accessMessage(error) {
   if (error instanceof CustomerAccessError) return error.message;
   const code = error?.code ?? error?.error;
-  if (code === 'invalid_credentials') return 'Incorrect mobile number or password. Please try again.';
+  if (code === 'invalid_credentials') return 'Incorrect mobile number or LahuzGo password. If you joined with Google, use Continue with Google.';
   if (code === 'phone_not_confirmed') return 'Please verify your mobile number before signing in.';
+  if (['bad_code_verifier', 'flow_state_expired', 'flow_state_not_found'].includes(code))
+    return 'This Google sign-in has expired. Please choose Continue with Google again.';
   if (['over_sms_send_rate_limit', 'over_request_rate_limit', 'rate_limited'].includes(code) || error?.status === 429)
     return 'Too many attempts. Please wait a few minutes and try again.';
   if (['otp_expired', 'invalid_or_expired'].includes(code)) return 'That code is invalid or expired. Request a new code and use the latest one.';
@@ -88,6 +97,7 @@ export class CustomerAccess {
     if (!normalized) throw new CustomerAccessError('Enter a valid Philippine mobile number.');
     if (!password) throw new CustomerAccessError('Enter your password.');
     this.credentials();
+    this.clearGoogleIntent();
     this.registration = null;
     try { this.registrationStorage.removeItem(REGISTRATION_STORAGE_KEY); } catch { /* Registration intent is never an authorization grant. */ }
     this.alertId = null;
@@ -97,6 +107,41 @@ export class CustomerAccess {
       await this.profileFromServer({ cancelDeletion: true });
       return await this.registerDevice();
     } catch (error) { await this.clearSession(); throw error; }
+  }
+  clearGoogleIntent() {
+    try { this.registrationStorage.removeItem(OAUTH_STORAGE_KEY); } catch { /* Intent is not an authorization grant. */ }
+  }
+  async startGoogleSignIn(remember = false) {
+    this.credentials();
+    this.registration = null;
+    this.registrationStorage.removeItem(REGISTRATION_STORAGE_KEY);
+    this.registrationStorage.setItem(OAUTH_STORAGE_KEY, JSON.stringify({ remember: Boolean(remember), startedAt: this.now() }));
+    try {
+      const data = resultValue(await this.client.auth.signInWithOAuth({ provider: 'google', options: {
+        redirectTo: CUSTOMER_CALLBACK_URL, skipBrowserRedirect: true, queryParams: { prompt: 'select_account' },
+      } }));
+      const url = new URL(data?.url);
+      if (url.origin !== BACKEND_URL || url.pathname !== '/auth/v1/authorize'
+        || url.searchParams.get('provider') !== 'google'
+        || url.searchParams.get('redirect_to') !== CUSTOMER_CALLBACK_URL)
+        throw new CustomerAccessError('Could not open secure Google sign-in. Please try again.');
+      return url.href;
+    } catch (error) { this.clearGoogleIntent(); throw error; }
+  }
+  async finishGoogleSignIn(code, flowId = null) {
+    if (!pendingGoogleSignIn(this.registrationStorage, this.now()) || !this.credentials(false)
+      || typeof code !== 'string' || !/^[A-Za-z0-9_-]{8,2048}$/.test(code)
+      || (flowId !== null && !/^[A-Za-z0-9_-]{1,128}$/.test(flowId))) {
+      this.clearGoogleIntent();
+      throw new CustomerAccessError('This Google sign-in has expired. Please choose Continue with Google again.');
+    }
+    try {
+      const data = resultValue(await this.client.auth.exchangeCodeForSession(code, flowId ? { flowId } : undefined));
+      if (!data?.session) throw new CustomerAccessError('Could not finish Google sign-in. Please try again.');
+      await this.profileFromServer({ cancelDeletion: true });
+      return await this.registerDevice();
+    } catch (error) { await this.clearSession(); throw error; }
+    finally { this.clearGoogleIntent(); }
   }
   async registerDevice() {
     const credential = this.credentials();
@@ -256,6 +301,7 @@ export class CustomerAccess {
       }
     } catch { /* Local sign-out must still complete when the connection is lost. */ }
     finally {
+      this.clearGoogleIntent();
       this.registration = null;
       try { this.registrationStorage.removeItem(REGISTRATION_STORAGE_KEY); } catch { /* Local sign-out still completes. */ }
       await this.clearSession();

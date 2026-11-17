@@ -12,9 +12,9 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="assets/lahuzgo-launcher-icon.png" />
   <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="customer-access.css?v=20261117" />
+  <link rel="stylesheet" href="customer-access.css?v=google-20261117" />
   <script src="assets/vendor/supabase-2.117.3.js" defer></script>
-  <script type="module" src="customer-access.js?v=20261117"></script>
+  <script type="module" src="customer-access.js?v=google-20261117"></script>
 </head>
 <body>
   <a class="skip" href="#access">Skip to customer access</a>
@@ -48,10 +48,13 @@
 
         <section id="login-panel" hidden aria-labelledby="login-title">
           <h2 id="login-title" tabindex="-1">Welcome back.</h2>
-          <p class="intro">Your next stop starts here. Sign in with your LahuzGo mobile number and password.</p>
+          <p class="intro">Sign in with the same account you use in the LahuzGo customer app.</p>
+          <button class="google-button" id="google-sign-in" type="button"><svg viewBox="0 0 48 48" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M43.6 24.5c0-1.5-.1-2.8-.4-4.2H24v8h11a9.4 9.4 0 0 1-4.1 6.2v5.2h6.6c3.9-3.6 6.1-8.9 6.1-15.2Z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.9l-6.6-5.2c-1.8 1.2-4.1 1.9-6.9 1.9-5.3 0-9.9-3.6-11.5-8.5H5.7v5.3A20.4 20.4 0 0 0 24 44Z"/><path fill="#FBBC05" d="M12.5 27.3a12.2 12.2 0 0 1 0-7.7v-5.3H5.7a20.2 20.2 0 0 0 0 18.3l6.8-5.3Z"/><path fill="#EA4335" d="M24 11.1c3 0 5.6 1 7.7 3l5.8-5.8A19.5 19.5 0 0 0 24 3a20.4 20.4 0 0 0-18.3 11.3l6.8 5.3C14.1 14.7 18.7 11.1 24 11.1Z"/></svg><span>Continue with Google</span></button>
+          <p class="google-hint">Use the Google account linked to your customer app.</p>
+          <div class="auth-divider"><span>or use your mobile number</span></div>
           <form id="login-form">
             <div class="field"><label for="login-phone">Mobile number</label><div class="phone-input"><span>+63</span><input id="login-phone" name="phone" type="tel" inputmode="tel" autocomplete="username" placeholder="9XX XXX XXXX" maxlength="24" required aria-describedby="login-phone-hint" /></div><p id="login-phone-hint" class="field-hint">Use the same number as your customer app.</p></div>
-            <div class="field"><div class="label-row"><label for="login-password">Password</label><button class="text-button help-trigger" type="button">Need help?</button></div><div class="password-input"><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" maxlength="256" required /><button class="password-toggle" type="button" data-password="login-password" aria-label="Show password" aria-pressed="false"><svg class="icon"><use href="#eye"/></svg></button></div></div>
+            <div class="field"><div class="label-row"><label for="login-password">LahuzGo password</label><button class="text-button help-trigger" type="button">Need help?</button></div><div class="password-input"><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your LahuzGo password" maxlength="256" required /><button class="password-toggle" type="button" data-password="login-password" aria-label="Show password" aria-pressed="false"><svg class="icon"><use href="#eye"/></svg></button></div><p class="field-hint">Joined with Google? Use Continue with Google above.</p></div>
             <label class="checkbox-row"><input id="remember-me" name="remember" type="checkbox" /><span>Keep me signed in <small>For a device only you use.</small></span></label>
             <button class="primary-button" id="login-submit" type="submit"><span>Sign in</span><svg class="icon"><use href="#arrow"/></svg></button>
           </form>
