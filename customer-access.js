@@ -1,10 +1,11 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
   accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, customerApiFetch,
   pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=portal-preview-20261117';
+import { CustomerRecovery } from './customer-recovery.js';
 
 const $ = id => document.getElementById(id);
-const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry'];
-let access, client, activeStorage, portal, busy = false, stage = 'checking', registrationStep = 'phone';
+const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry', 'recovery', 'recovery-success'];
+let access, client, activeStorage, portal, recovery, busy = false, stage = 'checking', registrationStep = 'phone', recoveryStep = 0;
 let pollTimer, emailTimer, emailSequence = 0, lastHelpTrigger;
 const authStorage = {
   getItem: key => activeStorage.getItem(key),
@@ -37,6 +38,7 @@ function createAccess(remember) {
     && local.getItem(DEVICE_STORAGE_KEY)) temporary.setItem(DEVICE_STORAGE_KEY, local.getItem(DEVICE_STORAGE_KEY));
   access = new CustomerAccess(client, { deviceStorage: remember ? local : temporary, registrationStorage: temporary,
     authStorage, userAgent: navigator.userAgent });
+  recovery ??= new CustomerRecovery(client);
 }
 function setStage(next, { focus = true } = {}) {
   if (next !== 'account' && portal) {
@@ -45,7 +47,7 @@ function setStage(next, { focus = true } = {}) {
   }
   stage = next;
   for (const panel of panels) $(`${panel}-panel`).hidden = panel !== next;
-  document.title = `${next === 'register' ? 'Create customer account' : next === 'account' ? 'Your customer account' : 'Customer login'} — LahuzGo`;
+  document.title = `${next === 'recovery' || next === 'recovery-success' ? 'Reset your password' : next === 'register' ? 'Create customer account' : next === 'account' ? 'Your customer account' : 'Customer login'} — LahuzGo`;
   if (next !== 'approval') { clearInterval(pollTimer); pollTimer = null; }
   if (focus) $(`${next}-title`)?.focus({ preventScroll: true });
   updateCooldowns();
@@ -65,6 +67,11 @@ function setRegisterStep(step) {
   setStage('register');
 }
 function updateCooldowns() {
+  if (recovery) {
+    const seconds = Math.max(0, Math.ceil((recovery.resendAt - Date.now()) / 1000));
+    $('recovery-resend').disabled = busy || seconds > 0;
+    $('recovery-resend').textContent = seconds ? `Resend code in ${seconds}s` : 'Resend code';
+  }
   for (const [id, at] of [['register-resend', access?.registration?.resendAt], ['approval-resend', access?.challenge?.resendAt]]) {
     const seconds = Math.max(0, Math.ceil(((at ?? 0) - Date.now()) / 1000));
     $(id).disabled = busy || seconds > 0;
@@ -181,6 +188,42 @@ $('login-form').addEventListener('submit', event => {
     const result = await access.signIn($('login-phone').value, $('login-password').value);
     $('login-password').value = ''; await applyState(result);
   });
+});
+function showRecoveryStep(step) {
+  recoveryStep = step;
+  const titles = ['A little help getting back in.', 'Check your Gmail.', 'A fresh start.'];
+  const notes = ['Enter the Gmail address registered to your LahuzGo account. We’ll send a 6-digit code to help you reset your password.', 'If this Gmail is registered to a customer account, we’ve sent a 6-digit code. Check your inbox and spam folder. The code expires in 10 minutes.', 'Choose a strong new LahuzGo password. This will also work in your customer app. Your Google password stays the same.'];
+  $('recovery-title').textContent = titles[step]; $('recovery-intro').textContent = notes[step];
+  $('recovery-step-label').textContent = `STEP ${step + 1} OF 3`;
+  for (const [i, part] of ['email','code','password'].entries()) $(`recovery-${part}-form`).hidden = i !== step;
+  for (const [i, mark] of [...document.querySelectorAll('[data-recovery-step]')].entries()) mark.classList.toggle('is-active',i <= step);
+  setStage('recovery');
+}
+function clearRecoveryInputs() { for (const id of ['recovery-code','recovery-password','recovery-confirm']) $(id).value = ''; }
+$('forgot-password').addEventListener('click', () => {
+  if (busy) return;
+  recovery.clear(); clearRecoveryInputs(); $('recovery-email').value = ''; emptyError(); showRecoveryStep(0);
+});
+for (const id of ['recovery-cancel','recovery-success-login']) $(id).addEventListener('click', () => {
+  recovery.clear(); clearRecoveryInputs(); emptyError(); setStage('login');
+});
+$('recovery-change-email').addEventListener('click', () => { recovery.clear(); clearRecoveryInputs(); emptyError(); showRecoveryStep(0); });
+$('recovery-email-form').addEventListener('submit', event => {
+  event.preventDefault();
+  if (!validGmail($('recovery-email').value.trim())) { $('recovery-email').setCustomValidity('Enter your registered Gmail address.'); $('recovery-email').reportValidity(); return; }
+  run(async () => { if (await recovery.start($('recovery-email').value)) { clearRecoveryInputs(); $('recovery-destination').textContent = recovery.email; showRecoveryStep(1); } });
+});
+$('recovery-resend').addEventListener('click', () => run(async () => { if (await recovery.start(recovery.email,{resend:true})) { $('recovery-code').value = ''; $('recovery-feedback').textContent = 'If this Gmail is registered, a new code has been sent. Use the latest code.'; } }));
+$('recovery-code-form').addEventListener('submit', event => {
+  event.preventDefault(); if (!$('recovery-code-form').reportValidity()) return;
+  run(async () => { if (await recovery.verify($('recovery-code').value.trim())) { $('recovery-code').value = ''; showRecoveryStep(2); } });
+});
+$('recovery-password').addEventListener('input', () => {
+  for (const [key, met] of Object.entries(passwordRequirements($('recovery-password').value))) document.querySelector(`[data-recovery-requirement="${key}"]`).classList.toggle('is-met',met);
+});
+$('recovery-password-form').addEventListener('submit', event => {
+  event.preventDefault(); if (!$('recovery-password-form').reportValidity()) return;
+  run(async () => { if (await recovery.finish($('recovery-password').value,$('recovery-confirm').value)) { clearRecoveryInputs(); $('login-password').value = ''; setStage('recovery-success'); } });
 });
 $('google-sign-in').addEventListener('click', () => run(async () => {
   createAccess($('remember-me').checked);
