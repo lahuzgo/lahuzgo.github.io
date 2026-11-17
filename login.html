@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1459ee" />
+  <meta name="robots" content="noindex,follow" />
+  <meta name="description" content="Sign in or create your LahuzGo customer account. Use the same mobile number and account in the LahuzGo app." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://hthasqnrljdwbcfjtsbp.supabase.co wss://hthasqnrljdwbcfjtsbp.supabase.co; object-src 'none'; base-uri 'self'; form-action 'self'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <title>Customer login — LahuzGo</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/lahuzgo-launcher-icon.png" />
+  <link rel="preload" href="assets/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="customer-access.css?v=20261117" />
+  <script src="assets/vendor/supabase-2.117.3.js" defer></script>
+  <script type="module" src="customer-access.js?v=20261117"></script>
+</head>
+<body>
+  <a class="skip" href="#access">Skip to customer access</a>
+  <svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="back" viewBox="0 0 24 24"><path d="M19 12H5m6-6-6 6 6 6"/></symbol>
+    <symbol id="shield" viewBox="0 0 24 24"><path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/></symbol>
+    <symbol id="eye" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="phone" viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 5h4m-3 14h2"/></symbol>
+    <symbol id="close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+  </defs></svg>
+  <header class="access-header">
+    <a class="brand" href="./" aria-label="LahuzGo home"><img src="assets/lahuzgo-launcher-icon.png" width="42" height="42" alt="" /><span>Lahuz<span>Go.</span></span></a>
+    <a class="back-link" href="./"><svg class="icon"><use href="#back"/></svg><span>Back to website</span></a>
+  </header>
+
+  <main class="access-layout" id="access">
+    <aside class="story" aria-label="LahuzGo in Ormoc">
+      <img class="story-photo" src="assets/delivery-editorial.webp" width="1120" height="1400" alt="A blue scooter with a parcel and groceries in a sunlit courtyard" />
+      <div class="story-copy"><p class="eyebrow">YOUR EVERYDAY, A LITTLE EASIER.</p><h1>A little help.<br />A little <em>closer.</em></h1><p>One customer account for the rides, deliveries and everyday errands that keep your day moving.</p></div>
+      <div class="story-footer"><div class="service-names"><span>Pa-angkas</span><span>Padala</span><span>Pabili</span></div><p><span class="local-dot"></span> Rooted in Ormoc. Made for your day.</p></div>
+    </aside>
+
+    <section class="access-panel" aria-label="Customer account">
+      <div class="access-content">
+        <div class="portal-label"><svg class="icon"><use href="#shield"/></svg> CUSTOMER ACCESS</div>
+        <div id="page-error" class="message error" role="alert" hidden></div>
+
+        <section id="checking-panel" class="state-panel" aria-labelledby="checking-title"><span class="state-icon"><svg class="icon"><use href="#shield"/></svg></span><h2 id="checking-title" tabindex="-1">Getting things ready.</h2><p>Checking your customer session…</p><span class="progress-line" aria-hidden="true"></span></section>
+
+        <section id="login-panel" hidden aria-labelledby="login-title">
+          <h2 id="login-title" tabindex="-1">Welcome back.</h2>
+          <p class="intro">Your next stop starts here. Sign in with your LahuzGo mobile number and password.</p>
+          <form id="login-form">
+            <div class="field"><label for="login-phone">Mobile number</label><div class="phone-input"><span>+63</span><input id="login-phone" name="phone" type="tel" inputmode="tel" autocomplete="username" placeholder="9XX XXX XXXX" maxlength="24" required aria-describedby="login-phone-hint" /></div><p id="login-phone-hint" class="field-hint">Use the same number as your customer app.</p></div>
+            <div class="field"><div class="label-row"><label for="login-password">Password</label><button class="text-button help-trigger" type="button">Need help?</button></div><div class="password-input"><input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" maxlength="256" required /><button class="password-toggle" type="button" data-password="login-password" aria-label="Show password" aria-pressed="false"><svg class="icon"><use href="#eye"/></svg></button></div></div>
+            <label class="checkbox-row"><input id="remember-me" name="remember" type="checkbox" /><span>Keep me signed in <small>For a device only you use.</small></span></label>
+            <button class="primary-button" id="login-submit" type="submit"><span>Sign in</span><svg class="icon"><use href="#arrow"/></svg></button>
+          </form>
+          <p class="switch-copy">New to LahuzGo? <button class="text-button" type="button" data-mode="register">Create an account <span aria-hidden="true">↗</span></button></p>
+        </section>
+
+        <section id="register-panel" hidden aria-labelledby="register-title">
+          <div class="step-track" aria-label="Registration progress"><span data-step="phone"></span><span data-step="code"></span><span data-step="details"></span></div>
+          <p class="step-label" id="register-step">STEP 1 OF 3</p>
+          <h2 id="register-title" tabindex="-1">Make yourself at home.</h2>
+          <p class="intro" id="register-intro">Start with your mobile number. We’ll send a code to verify it’s yours.</p>
+          <form id="register-phone-form"><div class="field"><label for="register-phone">Mobile number</label><div class="phone-input"><span>+63</span><input id="register-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel-national" placeholder="9XX XXX XXXX" maxlength="24" required /><p class="visually-hidden">Philippine mobile number</p></div><p class="field-hint">You can also enter your number starting with 09.</p></div><button class="primary-button" type="submit"><span>Send verification code</span><svg class="icon"><use href="#arrow"/></svg></button></form>
+          <form id="register-code-form" hidden><div class="field"><label for="register-code">6-digit verification code</label><input class="otp-input" id="register-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /><p class="field-hint" id="register-code-destination"></p></div><button class="primary-button" type="submit"><span>Verify mobile number</span><svg class="icon"><use href="#check"/></svg></button><div class="secondary-actions"><button id="register-resend" class="text-button" type="button">Resend code</button><button id="register-change-phone" class="text-button" type="button">Change number</button></div></form>
+          <form id="register-details-form" hidden>
+            <div class="verified-number"><svg class="icon"><use href="#check"/></svg><span id="verified-phone-label">Mobile number verified</span></div>
+            <div class="name-fields"><div class="field"><label for="first-name">First name</label><input id="first-name" name="given-name" autocomplete="given-name" maxlength="80" placeholder="First name" required /></div><div class="field"><label for="last-name">Last name</label><input id="last-name" name="family-name" autocomplete="family-name" maxlength="80" placeholder="Last name" required /></div></div>
+            <div class="field"><label for="register-gmail">Gmail address</label><input id="register-gmail" type="email" name="email" autocomplete="email" autocapitalize="none" spellcheck="false" maxlength="254" placeholder="you@gmail.com" required aria-describedby="gmail-feedback" /><p class="field-hint" id="gmail-feedback" aria-live="polite">Used for account updates and recovery.</p></div>
+            <div class="field"><label for="register-password">Create a password</label><div class="password-input"><input id="register-password" type="password" autocomplete="new-password" placeholder="Create a strong password" maxlength="256" required aria-describedby="password-requirements" /><button class="password-toggle" type="button" data-password="register-password" aria-label="Show password" aria-pressed="false"><svg class="icon"><use href="#eye"/></svg></button></div><ul class="password-requirements" id="password-requirements"><li data-requirement="length">8 or more characters</li><li data-requirement="upper">Uppercase letter</li><li data-requirement="lower">Lowercase letter</li><li data-requirement="number">Number</li><li data-requirement="special">Special character</li></ul></div>
+            <div class="field"><label for="confirm-password">Confirm password</label><div class="password-input"><input id="confirm-password" type="password" autocomplete="new-password" placeholder="Enter your password again" maxlength="256" required /><button class="password-toggle" type="button" data-password="confirm-password" aria-label="Show password" aria-pressed="false"><svg class="icon"><use href="#eye"/></svg></button></div></div>
+            <label class="checkbox-row terms-row"><input id="terms-consent" type="checkbox" required /><span>I agree to the <a href="terms-and-conditions.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and have read the <a href="privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span></label>
+            <button class="primary-button" type="submit"><span>Create customer account</span><svg class="icon"><use href="#arrow"/></svg></button>
+          </form>
+          <p class="switch-copy">Already have an account? <button class="text-button" type="button" data-mode="login">Sign in <span aria-hidden="true">↗</span></button></p>
+        </section>
+
+        <section id="approval-panel" hidden aria-labelledby="approval-title">
+          <span class="state-icon"><svg class="icon"><use href="#phone"/></svg></span><h2 id="approval-title" tabindex="-1">One quick security check.</h2><p class="intro">Approve this sign-in in LahuzGo on your other device, or verify with a code below.</p>
+          <p class="security-note">Approving this browser signs out your other device, just like the customer app.</p>
+          <div class="verification-options"><button id="approval-sms" class="outline-button" type="button" hidden>Text me a code</button><button id="approval-email" class="outline-button" type="button" hidden>Email me a code</button></div>
+          <p id="approval-options-note" class="field-hint" aria-live="polite"></p>
+          <form id="approval-code-form" hidden><div class="field"><label for="approval-code">6-digit verification code</label><input class="otp-input" id="approval-code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required /><p class="field-hint" id="approval-code-destination"></p></div><button class="primary-button" type="submit"><span>Verify &amp; sign in</span><svg class="icon"><use href="#arrow"/></svg></button><button id="approval-resend" class="text-button resend-button" type="button">Resend code</button></form>
+          <div class="secondary-actions"><button id="approval-check" class="text-button" type="button">Check approval</button><button id="approval-cancel" class="text-button" type="button">Cancel sign-in</button></div>
+        </section>
+
+        <section id="account-panel" class="state-panel" hidden aria-labelledby="account-title">
+          <span class="state-icon success"><svg class="icon"><use href="#check"/></svg></span><p class="eyebrow">YOUR CUSTOMER ACCOUNT</p><h2 id="account-title" tabindex="-1">Welcome to LahuzGo.</h2><p class="intro" id="account-name"></p>
+          <div class="account-summary"><span>Verified mobile number</span><strong id="account-phone"></strong><span>Gmail address</span><strong id="account-email"></strong></div>
+          <p class="availability-note">Your account is ready. Online booking is not available on the website yet. Pa-angkas, Padala and Pabili bookings are available in the customer app.</p>
+          <a class="primary-button" href="./#download"><span>Get the customer app</span><svg class="icon"><use href="#arrow"/></svg></a><button id="sign-out" class="outline-button" type="button">Sign out</button>
+        </section>
+
+        <section id="retry-panel" class="state-panel" hidden aria-labelledby="retry-title"><span class="state-icon"><svg class="icon"><use href="#shield"/></svg></span><h2 id="retry-title" tabindex="-1">Let’s reconnect.</h2><p class="intro">We couldn’t check your session. Check your connection and try again.</p><button id="retry-session" class="primary-button" type="button"><span>Try again</span><svg class="icon"><use href="#arrow"/></svg></button></section>
+        <noscript><p class="message error">Please turn on JavaScript to sign in or register securely.</p></noscript>
+        <footer class="form-footer"><svg class="icon"><use href="#shield"/></svg><p>Your account stays yours.<br /><a href="privacy-policy.html">Privacy</a><span aria-hidden="true"> · </span><a href="terms-and-conditions.html">Terms</a><span aria-hidden="true"> · </span><button class="text-button help-trigger" type="button">Get help</button></p></footer>
+      </div>
+    </section>
+  </main>
+  <footer class="access-bottom"><span>© <span id="copyright-year">2026</span> LahuzGo.</span><span>Local rides. Everyday errands.</span></footer>
+  <dialog id="help-dialog" aria-labelledby="help-title"><div class="help-heading"><h2 id="help-title">A little help signing in.</h2><button id="help-close" class="icon-button" type="button" aria-label="Close help"><svg class="icon"><use href="#close"/></svg></button></div><p>Use the mobile number and password from your LahuzGo customer account. You can reset a forgotten password from the customer app’s sign-in screen.</p><p>If you need a hand, our team can help.</p><a class="primary-button" href="mailto:atonlopez55@gmail.com?subject=LahuzGo%20customer%20account%20help"><span>Contact LahuzGo</span><svg class="icon"><use href="#arrow"/></svg></a></dialog>
+</body>
+</html>

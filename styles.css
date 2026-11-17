@@ -36,7 +36,7 @@ a,button,summary{outline-offset:5px}:focus-visible{outline:3px solid #4d8aff}
 .brand{display:inline-flex;align-items:center;gap:10px;white-space:nowrap;font-size:25px;font-weight:800;letter-spacing:-1.2px;line-height:1}
 .brand>img{width:43px;height:43px;border-radius:12px}.brand>span{display:flex;align-items:baseline}.brand>span>span{color:var(--blue)}
 .brand i{width:5px;height:5px;background:var(--blue);border-radius:50%;margin-left:3px}
-.site-nav{display:flex;align-items:center;gap:31px}.site-nav>a:not(.button){position:relative;font-size:11px;font-weight:600}
+.site-nav{display:flex;align-items:center;gap:clamp(15px,2vw,26px)}.site-nav>a:not(.button){position:relative;font-size:11px;font-weight:600}
 .site-nav>a:not(.button)::after{content:'';position:absolute;left:0;right:100%;bottom:-7px;height:2px;background:var(--blue);transition:right .25s}
 .site-nav>a:hover::after{right:0}.menu-toggle{display:none}
 .site-nav>a.nav-rider{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 13px;border:1px solid #d9e4f8;border-radius:8px;background:#edf3ff;color:#284b87;font-size:11px;font-weight:700;white-space:nowrap;transition:background .2s,border-color .2s,transform .25s var(--ease)}
@@ -271,7 +271,7 @@ a,button,summary{outline-offset:5px}:focus-visible{outline:3px solid #4d8aff}
 @media(max-width:1100px){
  .wrap{width:calc(100% - 72px)}.announcement{padding-inline:36px}.hero{gap:40px;min-height:675px}.hero h1{font-size:74px}.hero-image-wrap{height:525px}
  .hero-actions{gap:18px}.hero-actions .button{gap:20px}.hero-actions .text-link{font-size:11px;gap:8px}.hero-label{left:-24px;right:13px}.hero-label strong{font-size:11px}
- .ormoc-stamp{width:93px;height:93px;left:-30px}.ormoc-stamp .stamp-arrow{width:23px;height:23px}.site-nav{gap:21px}
+ .ormoc-stamp{width:93px;height:93px;left:-30px}.ormoc-stamp .stamp-arrow{width:23px;height:23px}.site-nav{gap:15px}
  .section-space{padding-block:88px}.section-heading h2,.how-intro h2{font-size:48px}.service-copy{padding:38px 32px}.service-copy h3{font-size:38px}.service-panel{min-height:430px}
  .how-layout{gap:55px}.connected-layout{gap:65px}.connected-copy h2{font-size:43px}.message-bubble{left:-25px}
  .rider-invitation-copy{padding:40px}.rider-invitation h2{font-size:43px}.rider-graphic{transform:scale(.87)}.rider-chip-one{left:-7px}.rider-chip-two{right:-10px}
