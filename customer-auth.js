@@ -196,9 +196,11 @@ export class CustomerAccess {
       await this.profileFromServer();
       const credential = this.credentials(false);
       if (!credential) throw new CustomerAccessError('Please sign in on this browser again.', 'access_denied');
+      // Customer SELECT access is column-scoped, as in the mobile app.
+      // The touch RPC below also verifies this installation's Auth session.
       const device = resultValue(await this.client.from('customer_device_installations')
-        .select('revoked_at,signed_out_at').eq('user_id', this.user.id).eq('installation_key', credential.key).maybeSingle());
-      if (!device || device.revoked_at || device.signed_out_at)
+        .select('revoked_at').eq('user_id', this.user.id).eq('installation_key', credential.key).maybeSingle());
+      if (!device || device.revoked_at)
         throw new CustomerAccessError('This browser has been signed out. Please sign in again.', 'access_denied');
       const alert = resultValue(await this.client.from('customer_login_alerts').select('id,status,approval_required')
         .eq('user_id', this.user.id).eq('actor_installation_key', credential.key)

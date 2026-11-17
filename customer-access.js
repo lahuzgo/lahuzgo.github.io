@@ -1,25 +1,15 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
   accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, timedFetch,
-  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=multi-20261117';
+  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=concurrent-20261117';
 
 const $ = id => document.getElementById(id);
 const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry'];
 let access, client, activeStorage, busy = false, stage = 'checking', registrationStep = 'phone';
 let pollTimer, emailTimer, emailSequence = 0, lastHelpTrigger;
 const authStorage = {
-  getItem: key => {
-    const value = activeStorage.getItem(key);
-    console.debug('LahuzGo session read', { key, saved: Boolean(value), browser: activeStorage === localStorage });
-    return value;
-  },
-  setItem: (key, value) => {
-    activeStorage.setItem(key, value);
-    console.debug('LahuzGo session saved', { key, saved: Boolean(activeStorage.getItem(key)), browser: activeStorage === localStorage });
-  },
-  removeItem: key => {
-    activeStorage.removeItem(key);
-    console.debug('LahuzGo session removed', { key, browser: activeStorage === localStorage });
-  },
+  getItem: key => activeStorage.getItem(key),
+  setItem: (key, value) => activeStorage.setItem(key, value),
+  removeItem: key => activeStorage.removeItem(key),
 };
 const help = $('help-dialog');
 const prettyPhone = value => {
