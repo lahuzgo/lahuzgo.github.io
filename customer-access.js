@@ -1,6 +1,6 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
   accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, timedFetch,
-  pendingGoogleSignIn } from './customer-auth.js?v=google-20261117';
+  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=multi-20261117';
 
 const $ = id => document.getElementById(id);
 const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry'];
@@ -21,20 +21,21 @@ function showError(error) { $('page-error').textContent = accessMessage(error); 
 function storageReady(storage) {
   const probe = 'lahuzgo.storage.check'; storage.setItem(probe, '1'); storage.removeItem(probe); return storage;
 }
-function createAccess(remember, { clearOther = false } = {}) {
+function createAccess(remember) {
   if (!globalThis.supabase?.createClient) throw new CustomerAccessError('The sign-in service could not load. Please refresh this page.');
   const local = storageReady(localStorage), temporary = storageReady(sessionStorage);
+  temporary.setItem(SESSION_PREFERENCE_KEY, remember ? 'local' : 'session');
   activeStorage = remember ? local : temporary;
-  if (clearOther) {
-    const other = remember ? temporary : local;
-    for (const key of [AUTH_STORAGE_KEY, AUTH_STORAGE_KEY + '-user', AUTH_STORAGE_KEY + '-code-verifier']) other.removeItem(key);
-  }
   client ??= globalThis.supabase.createClient(BACKEND_URL, PUBLISHABLE_KEY, {
     auth: { storageKey: AUTH_STORAGE_KEY, storage: authStorage, persistSession: true,
       autoRefreshToken: true, detectSessionInUrl: false, flowType: 'pkce' },
     global: { fetch: timedFetch(globalThis.fetch.bind(globalThis)), headers: { 'X-Client-Info': 'lahuzgo-customer-web/1.0' } },
   });
-  access = new CustomerAccess(client, { deviceStorage: local, registrationStorage: temporary,
+  // Temporary logins keep their own installation identity per tab. A second
+  // tab's sign-in must not rebind this tab's device record to another session.
+  if (!remember && temporary.getItem(AUTH_STORAGE_KEY) && !temporary.getItem(DEVICE_STORAGE_KEY)
+    && local.getItem(DEVICE_STORAGE_KEY)) temporary.setItem(DEVICE_STORAGE_KEY, local.getItem(DEVICE_STORAGE_KEY));
+  access = new CustomerAccess(client, { deviceStorage: remember ? local : temporary, registrationStorage: temporary,
     authStorage, userAgent: navigator.userAgent });
 }
 function setStage(next, { focus = true } = {}) {
@@ -153,7 +154,7 @@ document.querySelectorAll('[data-mode]').forEach(button => button.addEventListen
   await access.signOut(); emptyError(); emailSequence++;
   const register = button.dataset.mode === 'register';
   history.replaceState(null, '', register ? 'login.html?mode=register' : 'login.html');
-  createAccess(false, { clearOther: true });
+  createAccess(false);
   $('register-code').value = ''; $('register-password').value = ''; $('confirm-password').value = '';
   if (register) setRegisterStep('phone'); else setStage('login');
 })));
@@ -161,13 +162,13 @@ $('login-form').addEventListener('submit', event => {
   event.preventDefault();
   if (!checkPhoneInput($('login-phone')) || !$('login-form').reportValidity()) return;
   run(async () => {
-    createAccess($('remember-me').checked, { clearOther: true });
+    createAccess($('remember-me').checked);
     const result = await access.signIn($('login-phone').value, $('login-password').value);
     $('login-password').value = ''; await applyState(result);
   });
 });
 $('google-sign-in').addEventListener('click', () => run(async () => {
-  createAccess($('remember-me').checked, { clearOther: true });
+  createAccess($('remember-me').checked);
   const destination = await access.startGoogleSignIn($('remember-me').checked);
   location.assign(destination);
 }));
@@ -267,7 +268,7 @@ try {
   const code = params.get('code'), flowId = params.get('sb_flow_id');
   const providerError = params.get('error') ?? fragment.get('error');
   const googleIntent = pendingGoogleSignIn(sessionStorage);
-  const remember = googleIntent?.remember ?? Boolean(localStorage.getItem(AUTH_STORAGE_KEY));
+  const remember = rememberBrowserSession(localStorage, sessionStorage, googleIntent);
   $('remember-me').checked = remember;
   createAccess(remember);
   // Remove callback codes/errors before further network requests or navigation.

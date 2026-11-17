@@ -6,6 +6,14 @@ export const REGISTRATION_STORAGE_KEY = 'lahuzgo.customer.registration.v1';
 export const RESEND_MS = 300_000;
 export const OAUTH_STORAGE_KEY = 'lahuzgo.customer.google.v1';
 export const CUSTOMER_CALLBACK_URL = 'https://lahuzgo.github.io/login.html';
+export const SESSION_PREFERENCE_KEY = 'lahuzgo.customer.storage.v1';
+export function rememberBrowserSession(local, temporary, googleIntent = null) {
+  if (googleIntent) return googleIntent.remember;
+  const preference = temporary.getItem(SESSION_PREFERENCE_KEY);
+  if (preference === 'local') return true;
+  if (preference === 'session' || temporary.getItem(AUTH_STORAGE_KEY)) return false;
+  return Boolean(local.getItem(AUTH_STORAGE_KEY));
+}
 export function pendingGoogleSignIn(storage, now = Date.now()) {
   const value = readJSON(storage, OAUTH_STORAGE_KEY);
   return typeof value?.remember === 'boolean' && Number.isFinite(value.startedAt)
