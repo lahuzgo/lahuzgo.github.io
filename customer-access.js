@@ -7,9 +7,19 @@ const panels = ['checking', 'login', 'register', 'approval', 'account', 'retry']
 let access, client, activeStorage, busy = false, stage = 'checking', registrationStep = 'phone';
 let pollTimer, emailTimer, emailSequence = 0, lastHelpTrigger;
 const authStorage = {
-  getItem: key => activeStorage.getItem(key),
-  setItem: (key, value) => activeStorage.setItem(key, value),
-  removeItem: key => activeStorage.removeItem(key),
+  getItem: key => {
+    const value = activeStorage.getItem(key);
+    console.debug('LahuzGo session read', { key, saved: Boolean(value), browser: activeStorage === localStorage });
+    return value;
+  },
+  setItem: (key, value) => {
+    activeStorage.setItem(key, value);
+    console.debug('LahuzGo session saved', { key, saved: Boolean(activeStorage.getItem(key)), browser: activeStorage === localStorage });
+  },
+  removeItem: key => {
+    activeStorage.removeItem(key);
+    console.debug('LahuzGo session removed', { key, browser: activeStorage === localStorage });
+  },
 };
 const help = $('help-dialog');
 const prettyPhone = value => {
