@@ -89,7 +89,9 @@ export class CustomerAccess {
     this.crypto = crypto; this.userAgent = userAgent; this.now = now; this.authStorage = authStorage;
     this.profile = null; this.user = null; this.alertId = null; this.challenge = null;
     this.callbackURL = customerCallbackURL(locationOrigin);
-    this.registration = readJSON(registrationStorage, REGISTRATION_STORAGE_KEY);
+    this.registration = null;
+    // Temporary signup proof never survives closing or reloading the page.
+    try { registrationStorage.removeItem(REGISTRATION_STORAGE_KEY); } catch { /* Legacy intent is not proof. */ }
   }
   credentials(create = true) {
     const saved = readJSON(this.deviceStorage, DEVICE_STORAGE_KEY);
@@ -213,10 +215,6 @@ export class CustomerAccess {
     const session = resultValue(await this.client.auth.getSession())?.session;
     if (!session) return { state: 'login' };
     try {
-      if (this.registration?.phone) {
-        await this.ensureClaimable(this.registration.phone);
-        return { state: 'register-details', phone: this.registration.phone };
-      }
       await this.profileFromServer();
       const credential = this.credentials(false);
       if (!credential) throw new CustomerAccessError('Please sign in on this browser again.', 'access_denied');
@@ -236,16 +234,32 @@ export class CustomerAccess {
       await this.clearSession(); throw error;
     }
   }
-  async ensureClaimable(phone) {
-    const user = resultValue(await this.client.auth.getUser())?.user;
-    if (!user?.phone_confirmed_at || normalizePhone(user.phone) !== phone)
-      throw new CustomerAccessError('Please verify your mobile number again.', 'access_denied');
-    const claimable = resultValue(await this.client.rpc('registration_phone_claimable'));
-    if (claimable !== true) {
-      await this.clearSession();
-      throw new CustomerAccessError('This number is already registered. Please sign in instead.', 'access_denied');
+  async registrationAction(body) {
+    const response = await this.client.functions.invoke('customer-registration', { body });
+    let data = response.data;
+    if (response.error) {
+      try { data = await response.error.context?.json(); } catch { /* Only known error codes are displayed. */ }
     }
-    return user;
+    if (response.error || data?.ok !== true) {
+      const code = data?.error;
+      const messages = {
+        account_exists: 'This mobile number is already registered. Please sign in instead.',
+        gmail_exists: 'This Gmail is already linked to another account. Please use a different Gmail.',
+        invalid_details: 'Check your name, Gmail, password and Terms agreement.',
+        request_in_progress: 'Your account is being created. Please wait a moment and try again.',
+        registration_uncertain: 'Could not confirm account creation. Try again or sign in if your account was created.',
+      };
+      throw new CustomerAccessError(messages[code] || accessMessage({ error: code, status: response.error?.status }), code);
+    }
+    return data;
+  }
+  registrationProof(verified = false) {
+    const value = this.registration;
+    if (!value?.id || !value.requestToken || this.now() >= value.expiresAt || (verified && !value.grant)) {
+      this.registration = null;
+      throw new CustomerAccessError('Verification expired. Start registration again and request a new code.', 'registration_expired');
+    }
+    return { challenge_id: value.id, request_token: value.requestToken, ...(verified ? { registration_token: value.grant } : {}) };
   }
   async sendRegistrationCode(phone, { resend = false } = {}) {
     const normalized = normalizePhone(phone);
@@ -253,24 +267,24 @@ export class CustomerAccess {
     if (resend && this.registration?.phone === normalized && this.now() < this.registration.resendAt)
       throw new CustomerAccessError('Please wait before requesting another code.');
     this.credentials();
-    resultValue(await this.client.auth.signInWithOtp({ phone: normalized, options: { shouldCreateUser: true } }));
-    this.registration = { phone: normalized, resendAt: this.now() + RESEND_MS };
-    this.registrationStorage.setItem(REGISTRATION_STORAGE_KEY, JSON.stringify(this.registration));
+    this.registration = null;
+    const data = await this.registrationAction({ action: 'start', phone: normalized });
+    this.registration = { phone: normalized, id: data.challenge_id, requestToken: data.request_token,
+      expiresAt: this.now() + data.expires_in * 1000, resendAt: this.now() + data.resend_after * 1000 };
     return this.registration;
   }
   async verifyRegistrationCode(code) {
-    const phone = this.registration?.phone;
-    if (!phone || !/^\d{6}$/.test(code)) throw new CustomerAccessError('Enter the latest 6-digit verification code.');
-    const response = resultValue(await this.client.auth.verifyOtp({ phone, token: code, type: 'sms' }));
-    if (!response?.session) throw new CustomerAccessError('Could not verify your mobile number. Please try again.');
-    await this.ensureClaimable(phone);
-    return { state: 'register-details', phone };
+    if (!/^\d{6}$/.test(code)) throw new CustomerAccessError('Enter the latest 6-digit verification code.');
+    const data = await this.registrationAction({ ...this.registrationProof(), action: 'verify', code });
+    this.registration.grant = data.registration_token;
+    this.registration.expiresAt = this.now() + data.expires_in * 1000;
+    return { state: 'register-details', phone: this.registration.phone };
   }
   async gmailAvailable(email) {
     if (!validGmail(email)) return false;
-    const available = resultValue(await this.client.rpc('registration_gmail_available', { p_email: email.trim().toLowerCase() }));
-    if (typeof available !== 'boolean') throw new CustomerAccessError('Could not check this Gmail. Please try again.');
-    return available;
+    const data = await this.registrationAction({ ...this.registrationProof(true), action: 'email', email: email.trim().toLowerCase() });
+    if (typeof data.available !== 'boolean') throw new CustomerAccessError('Could not check this Gmail. Please try again.');
+    return data.available;
   }
   async completeRegistration({ first, last, gmail, password, confirmation, terms }) {
     if (!terms) throw new CustomerAccessError('Please agree to the Terms & Conditions before creating your account.');
@@ -281,15 +295,16 @@ export class CustomerAccess {
     if (!Object.values(passwordRequirements(password)).every(Boolean))
       throw new CustomerAccessError('Your password must meet all five requirements below.');
     if (password !== confirmation) throw new CustomerAccessError('Your passwords do not match.');
-    const phone = this.registration?.phone;
-    if (!phone) throw new CustomerAccessError('Please verify your mobile number again.');
-    await this.ensureClaimable(phone);
+    const proof = this.registrationProof(true), phone = this.registration.phone;
     if (!await this.gmailAvailable(email)) throw new CustomerAccessError('This Gmail is already linked to another account. Please use a different Gmail.');
-    resultValue(await this.client.auth.updateUser({ email, password, data: {
-      first_name: first.trim(), last_name: last.trim(), contact_email: email, registration_complete: true,
-    } }));
+    await this.registrationAction({ ...proof, action: 'finish', first_name: first.trim(), last_name: last.trim(), email, password, terms_accepted: true });
     this.registration = null;
-    try { this.registrationStorage.removeItem(REGISTRATION_STORAGE_KEY); } catch { /* No passwords are stored here. */ }
+    try {
+      const auth = resultValue(await this.client.auth.signInWithPassword({ phone, password }));
+      if (!auth?.session) throw Error('No login session');
+    } catch {
+      throw new CustomerAccessError('Your account is created. Sign in with your mobile number and password to continue.', 'account_created');
+    }
     await this.profileFromServer({ cancelDeletion: true });
     return this.registerDevice();
   }

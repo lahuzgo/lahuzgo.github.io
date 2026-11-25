@@ -1,6 +1,6 @@
 import { CustomerAccess, CustomerAccessError, BACKEND_URL, PUBLISHABLE_KEY, AUTH_STORAGE_KEY,
   accessMessage, isConnectionError, normalizePhone, validGmail, passwordRequirements, customerApiFetch,
-  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=sms-login-20261118';
+  pendingGoogleSignIn, rememberBrowserSession, SESSION_PREFERENCE_KEY, DEVICE_STORAGE_KEY } from './customer-auth.js?v=staged-signup-20261125';
 import { CustomerRecovery } from './customer-recovery.js?v=sms-login-20261118';
 
 const $ = id => document.getElementById(id);
@@ -95,6 +95,11 @@ async function run(action) {
   emptyError(); setBusy(true);
   try { await action(); }
   catch (error) {
+    if (error?.code === 'registration_expired') setRegisterStep('phone');
+    if (error?.code === 'account_created') {
+      $('register-password').value = ''; $('confirm-password').value = '';
+      setStage('login');
+    }
     if (error?.code === 'access_denied') {
       await access?.clearSession(); setStage('login');
     }
