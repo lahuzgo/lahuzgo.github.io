@@ -72,11 +72,11 @@ export function timedFetch(fetcher, timeout = 20_000) {
   };
 }
 export function customerApiFetch(fetcher) {
-  const standard = timedFetch(fetcher), quote = timedFetch(fetcher, 35_000), media = timedFetch(fetcher, 100_000), loginOtp = timedFetch(fetcher, 45_000);
+  const standard = timedFetch(fetcher), quote = timedFetch(fetcher, 35_000), media = timedFetch(fetcher, 100_000), loginOtp = timedFetch(fetcher, 45_000), registration = timedFetch(fetcher, 60_000);
   return (input, options) => {
     const path = new URL(typeof input === 'string' || input instanceof URL ? input : input.url, BACKEND_URL).pathname;
     const request = path.startsWith('/storage/v1/object/chat-media/') ? media : path === '/functions/v1/angkas-quote' ? quote
-      : path === '/functions/v1/customer-device-auth' ? loginOtp : standard;
+      : path === '/functions/v1/customer-device-auth' ? loginOtp : path === '/functions/v1/customer-registration' ? registration : standard;
     return request(input, options);
   };
 }
