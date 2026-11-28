@@ -201,12 +201,14 @@ a,button,summary{outline-offset:5px}:focus-visible{outline:3px solid #4d8aff}
 .download-inner>.eyebrow{justify-content:center;color:#b8d1ff;font-size:8px;margin-bottom:23px}
 .download-inner h2{font-size:clamp(42px,5.2vw,70px);line-height:1.05;font-weight:650}.download-inner h2 em{color:#d3e3ff;font-size:1.05em;letter-spacing:-.035em}
 .download-inner>p:not(.eyebrow){margin-top:23px;font-size:12px;color:#bdd3ff;line-height:1.8}
-.store-buttons{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:30px}
+.store-buttons{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px;margin-top:30px}
 .store-button{display:flex;align-items:center;gap:12px;min-width:200px;min-height:64px;padding:13px 20px;background:#fff;border:1px solid #fff;border-radius:9px;color:var(--navy);text-align:left;line-height:1.1;transition:background .2s,transform .25s}
 .store-button:hover{background:#edf3ff;transform:translateY(-3px)}.store-button>.icon{width:24px;height:24px;stroke-width:1.4}
 .store-button small{display:block;font-size:7px;font-weight:700;letter-spacing:.08em}.store-button strong{display:block;margin-top:5px;font-size:17px;letter-spacing:-.045em;font-weight:750}
 .store-button .store-arrow{width:16px;height:16px;margin-left:10px}
 .store-button-muted{min-width:180px;background:#ffffff0b;border-color:#ffffff40;color:#fff}.store-button-muted small{color:#b8d1ff}.store-button-muted:hover{background:#ffffff1f}
+.store-login{background:var(--navy);border-color:#ffffff40;color:#fff}.store-login small{color:#b8d1ff}.store-login:hover{background:#173b70}
+@media(max-width:700px){.store-login{flex-basis:100%;justify-content:center}}
 .apk-link{display:inline-flex;align-items:center;gap:8px;margin-top:22px;color:#d2e2ff;font-size:9px;text-decoration:underline;text-underline-offset:4px}
 .apk-link .icon{width:12px;height:12px}.apk-link:hover{color:white}
 
