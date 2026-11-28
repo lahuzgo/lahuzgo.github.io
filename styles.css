@@ -53,6 +53,7 @@ a,button,summary{outline-offset:5px}:focus-visible{outline:3px solid #4d8aff}
 .hero-actions .button{min-width:0;min-height:60px;justify-content:space-between;gap:14px;padding:13px 17px;border-radius:12px;font-size:13px;letter-spacing:-.015em;white-space:nowrap;transition:background .2s,border-color .2s,box-shadow .2s,transform .2s}
 .hero-actions .hero-login{background:var(--blue);border-color:var(--blue);box-shadow:0 6px 16px #1459ee26}.hero-actions .hero-login:hover{background:#0b49d1;border-color:#0b49d1;box-shadow:0 8px 20px #1459ee33;transform:translateY(-2px)}
 .hero-actions .hero-download{background:#fff;border-color:#d4def0;color:var(--navy);box-shadow:0 2px 5px #0a235405}.hero-actions .hero-download:hover{background:#eef4ff;border-color:#a9bff0;box-shadow:0 6px 16px #0a23540d;transform:translateY(-2px)}
+.hero-actions .hero-download>span:first-child{min-width:0;white-space:normal;line-height:1.2}
 .hero-action-icon{display:grid;place-items:center;flex:0 0 auto;width:32px;height:32px;border-radius:9px;background:#ffffff26}.hero-download .hero-action-icon{background:#edf3ff;color:var(--blue)}
 .hero-actions .hero-action-icon .icon{width:17px;height:17px;stroke-width:1.9}.hero-actions .button:hover .icon{transform:none}
 .hero-actions .hero-how{grid-column:1/-1;justify-self:start;min-height:44px;gap:10px;padding-block:2px;margin-top:1px;border-radius:7px;color:#4b607e;font-size:12px;font-weight:650}.hero-actions .hero-how:hover{color:var(--blue)}
@@ -342,7 +343,7 @@ a,button,summary{outline-offset:5px}:focus-visible{outline:3px solid #4d8aff}
 }
 @media(max-width:360px){
  .rider-dialog h2{font-size:35px}.rider-dialog-header,.rider-dialog-content{padding-inline:21px}
- .wrap{width:calc(100% - 32px)}.announcement{padding-inline:16px}.announcement>a{display:none}.hero h1{font-size:56px}.hero-actions{gap:10px}.hero-actions .button{padding-inline:12px;font-size:12px;gap:8px}.hero-actions .hero-action-icon{width:27px;height:27px}.hero-label strong{font-size:9px}
+ .wrap{width:calc(100% - 32px)}.announcement{padding-inline:16px}.announcement>a{display:none}.hero h1{font-size:56px}.hero-actions{gap:10px}.hero-actions .button{padding-inline:12px;font-size:12px;gap:8px}.hero-actions .hero-download{padding-inline:10px;gap:6px}.hero-actions .hero-action-icon{width:27px;height:27px}.hero-label strong{font-size:9px}
  .service-tab{padding:12px 10px;gap:8px}.service-tab .tab-arrow{display:none}.service-copy{padding-inline:23px}.service-scene{min-height:303px}.scene-point{font-size:7px}.rider-invitation-copy{padding-inline:24px}.download-inner h2{font-size:39px}.store-button{padding-inline:12px}.store-button strong{font-size:14px}.store-button>.icon{width:18px;height:18px}
 }
 /* Reading copy stays comfortably sized; micro-labels are decorative hierarchy. */
